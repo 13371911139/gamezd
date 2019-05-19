@@ -174,7 +174,6 @@ let robotAction = (xy, mouse, key, fun) => {
 				}
 
 				var pp = new Promise((resolve, reject) => {
-
 					if (global.nowObj.checkBefore) {
 						func.getPx([global.icons[global.nowObj.checkBefore]], (a, b) => {
 							

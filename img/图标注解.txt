@@ -1,0 +1,11 @@
+closeDefult.png   //默认关闭按钮
+bianKuang.png  //聊天右上角
+djl.png	         //道具栏，判断是否打开道具栏或者是否关闭道具栏
+fbl.png 		//判断是否打开法宝栏，或关闭法宝栏
+useqh.png	//判断是否关闭或打开无色旗盒
+ckglyxz.png	//判断点击仓库管理员时是否在打开文字上
+ck.png		//判断仓库是否打开
+ck1.png -ck7.png	//判断指定仓库是否打开 
+gml.png		//判断仙灵店铺是否打开
+xtxx.png		//系统消息，用来判断是否打开系统消息，
+xlff.png		//判断是否在西凉ff

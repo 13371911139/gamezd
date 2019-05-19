@@ -1,0 +1,25 @@
+{
+  "name": "playgameautomation",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "np": "node ./app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron-rebuild": "^1.8.4"
+  },
+  "dependencies": {
+    "baidu-aip-sdk": "^2.3.9",
+    "get-pixels": "^3.3.2",
+    "gm": "^1.23.1",
+    "iohook": "^0.4.4",
+    "keypress": "^0.2.1",
+    "prebuild-install": "^5.2.4",
+    "robotjs": "^0.5.1",
+    "screenshot-desktop": "^1.7.0"
+  },
+  "description": ""
+}

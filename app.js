@@ -169,7 +169,7 @@ let robotAction = (xy, mouse, key, fun) => {
 			if ((tx < ofsets[0] && ty < ofsets[1]) || !zz[0]) {
 				if (global.nowObj.check == 'npc') {
 					for (let i = 0; i <= 10; i++) {
-						robot.moveMouse(py.x, py.y - i * 10);
+						robot.moveMouse(py.x, py.y - i * 10);//sdfasdf
 					}
 				}
 

@@ -1,6 +1,7 @@
 const robot = require("robotjs")
 const getPixels = require("get-pixels")
 const screenshot = require('screenshot-desktop')
+const checks=require('./check/index')
 var fs = require('fs');
 var AipOcrClient = require("baidu-aip-sdk").ocr;
 var APP_ID = "16059958";
@@ -20,7 +21,7 @@ HttpClient.setRequestOptions({ timeout: 5000 });
 // });
 
 
-const datas = {
+const datas =func = {
     //获取图信息
     getIcon: (imgpath, ico) => {
 
@@ -139,14 +140,13 @@ const datas = {
                                         }
                                     }
                                 }
-                                if (sumNum / item.color.length > 0.5) {
+                                if (sumNum / item.color.length > 0.8) {
                                     pxArr[mts] = { x: j - global.windowPixel.x, y: i - global.windowPixel.y }
 
                                 } else {
                                     pxArr[mts] = pxArr[mts] || false
                                 }
-                                if (sumNum / item.color.length > 0.9) {
-                                    console.log(1)
+                                if (sumNum / item.color.length > 0.8) {
                                     iconLength[mts]=iconLength[mts] || []
                                     iconLength[mts].push({ x: j - global.windowPixel.x, y: i - global.windowPixel.y })
 
@@ -175,6 +175,171 @@ const datas = {
             // 如果发生网络错误
             console.log(err);
         });
+    },
+    robotAction: (xy, mouse, key, fun) => {
+        let getPic=datas.getPic
+        setTimeout(() => {
+            let nowpy = robot.getMousePos()
+            var pyxc = (nowpy.x - xy[0]) / 10, pyyc = (nowpy.y - xy[1]) / 10
+            for (let i = 0; i <= 10; i++) {
+                robot.moveMouse(nowpy.x - pyxc * i, nowpy.y - pyyc * i);
+            }
+            thenFun = (zz, py) => {
+                console.log('到达指定位置开始验证虚拟坐标')
+                y = py.y + (xy[1] - zz[1])
+                x = py.x + (xy[0] - zz[0])
+                tx = Math.abs(xy[0] - zz[0])
+                ty = Math.abs(xy[1] - zz[1])
+                let ofsets = global.nowObj.ofset || [5, 5]
+                if ((tx < ofsets[0] && ty < ofsets[1]) || !zz[0]) {
+                    console.log('位置坐标验证通过')
+                    if (global.nowObj.check == 'npc') {
+                        for (let i = 0; i <= 10; i++) {
+                            robot.moveMouse(py.x, py.y - i * 10);//sdfasdf
+                        }
+                    }
+    
+                    var pp = new Promise((resolve, reject) => {
+                        if (global.nowObj.checkBefore) {
+                            console.log('开始验证执行条件判断',global.nowObj.checkBefore)
+                            checks[global.nowObj.checkBefore] ? checks[global.nowObj.checkBefore](resolve, reject):false&&resolve(true)
+    
+                        }else{
+                            console.log('位置坐标验证通过')
+                            resolve(true)
+                        }
+    
+                    });
+                    //在那之前的判断
+                    Promise.all([pp]).then((values) => {
+                        if(!values[0])return;
+                        global.nowObj.beforeKey && robot.keyTap(...global.nowObj.beforeKey)
+                        global.nowObj.beforeKeyArr && global.nowObj.beforeKeyArr.forEach((item) => {
+                            robot.keyTap(item)
+                        })
+                        setTimeout(() => {
+                            mouse && robot.mouseClick(mouse)
+                            setTimeout(() => {
+    
+                                if (global.nowObj.checkAfter) return func.getPx([global.icons[global.nowObj.checkAfter]], (a, b) => {
+                                    
+                                    //点击后判断是否存在某物
+                                    if (a[0]) {
+                                        robotFun()//getPic(zz[0] ? zzObj.zz : zzObj.apczz)
+                                    } else {
+                                        global.nowObj.keyArr && global.nowObj.keyArr.forEach((item) => {
+                                            
+                                            robot.keyTap(item)
+                                        })
+                                        global.nowObj.mcArr && global.nowObj.mcArr.forEach((item) => {
+                                            robot.mouseClick(item)
+                                        })
+                                        key && robot.keyTap(...key)
+                                        fun && fun()
+                                    }
+                                })
+                                global.nowObj.keyArr && global.nowObj.keyArr.forEach((item) => {
+                                    
+                                    robot.keyTap(item)
+                                })
+                                global.nowObj.mcArr && global.nowObj.mcArr.forEach((item) => {
+                                    robot.mouseClick(item)
+                                })
+                                key && robot.keyTap(...key)
+                                fun && fun()
+                            }, 200)
+                        }, 100)
+    
+                    })
+    
+    
+    
+                    return
+                }
+                if (!zz[0]) {
+                    x = xy[0], y = xy[1]
+                }
+                let nowpys = robot.getMousePos()
+                var pyxcs = (nowpys.x - x) / 3, pyycs = (nowpys.y - y) / 3
+                for (let i = 0; i <= 3; i++) {
+                    robot.moveMouse(nowpys.x - pyxcs * i, nowpys.y - pyycs * i);
+                }
+                
+                if(!zz[0]){
+                    robot.moveMouse(global.windowPixel.x +100, global.windowPixel.y+100);
+                }
+                getPic(zzObj.zz)
+    
+            }
+            ok = () => {
+                robot.mouseClick(mouse)
+            }
+            getPic(zzObj.zz)
+    
+        }, 50)
+    },
+    getPic:(zzArr) => {
+        let imgPaths,getZZPx=datas.getZZPx,getPic=datas.getPic
+        debugger
+        console.log('开始截取图片')
+        try {
+            screenshot({ filename: 'shot.png' }).then((imgPath) => {
+                console.log('开始截取图片成功')
+                getZZPx(zzArr, imgPath)
+    
+            }).catch((err) => {
+                console.log(err)
+                getPic(zzArr)
+            });
+        } catch (e) {
+            console.log(e)
+        }
+    
+    
+    },
+    getZZPx :(zz, imgPath) => {
+        if (!isOpen) return false
+        nums = 0
+        nowPy = []
+        arrJt = []
+        getPixels(imgPath, function (err, pixels) {
+            console.log(imgPath)
+            if (err) {
+                getZZPx = (zz, imgPath)
+                return
+            }
+            let heighth = global.windowPixel.h + global.windowPixel.y
+            let widthx = global.windowPixel.w + global.windowPixel.x
+            let zzPx = robot.getMousePos()
+            for (let j = zzPx.y - 100; j <= zzPx.y + 100; j++) {
+                for (let i = zzPx.x - 100; i <= zzPx.x + 100; i++) {
+                    let rgba = pixels.get(i, j, 0) + ',' + pixels.get(i, j, 1) + ',' + pixels.get(i, j, 2) + ',' + pixels.get(i, j, 3)
+                    arrJt.push(rgba)
+    
+                    if (rgba == zz[0]) {
+                        let num = 0
+                        for (var t = 0; t < 21; t++) {
+                            nowRgb = pixels.get(t, t, 0) + ',' + pixels.get(t, t, 1) + ',' + pixels.get(t, t, 2) + ',' + pixels.get(t, t, 3)
+                            onnowRgb = pixels.get(t + i, t + j, 0) + ',' + pixels.get(t + i, t + j, 1) + ',' + pixels.get(t + i, t + j, 2) + ',' + pixels.get(t + i, t + j, 3)
+    
+                            if (zz.indexOf(onnowRgb) >= 0) {
+                                num++
+                            }
+                        }
+    
+                        if (num > nums) {
+                            //console.log([i, j], num)
+                            nums = num;
+                            nowPy = [i, j]
+                        }
+                    }
+                }
+            }
+    
+            thenFun(nowPy, robot.getMousePos())
+        })
+    
+        return nowPy
     }
 }
 

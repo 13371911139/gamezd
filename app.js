@@ -2,7 +2,7 @@
 const robot = require("robotjs")
 const getPixels = require("get-pixels")
 const screenshot = require('screenshot-desktop')
-
+const checks=require('./check/index')
 var gm = require('gm');
 var events = require("events");
 var twoPI = Math.PI * 2.0;
@@ -11,14 +11,14 @@ robot.setKeyboardDelay(200)
 var screenSize = robot.getScreenSize();
 var height = (screenSize.height / 2) - 10;
 var width = screenSize.width;
-var isOpen = false
+global.isOpen = false
 const path = './'
 
 // robot.mouseClick=(mouse)=>{
 
 // }
 
-const func = require('./index')
+global.func = require('./index')
 global.icons = {}
 //func.getIcon(path + 'img/mhxiicon.png','login')
 func.getIcon(path + 'img/isZhandou.png', 'tabs')
@@ -66,7 +66,7 @@ setTimeout(function () {
 	})
 }, 10000)
 let zz = [], apczz = []
-const zzObj = {
+global.zzObj = {
 	zz: [], apczz: []
 }
 //获取指针对象
@@ -123,7 +123,6 @@ let getZZPx = (zz, imgPath) => {
 						nums = num;
 						nowPy = [i, j]
 					}
-					console.log(nums, nowPy, 'sdfsdfasdfsadf')
 				}
 			}
 		}
@@ -133,165 +132,122 @@ let getZZPx = (zz, imgPath) => {
 
 	return nowPy
 }
-let getPic = (zzArr) => {
-	let imgPaths
-	try {
-		screenshot({ filename: 'shot.png' }).then((imgPath) => {
-			getZZPx(zzArr, imgPath)
+let getPic =func.getPic// (zzArr) => {
+// 	let imgPaths
+// 	try {
+// 		screenshot({ filename: 'shot.png' }).then((imgPath) => {
+// 			getZZPx(zzArr, imgPath)
 
-		}).catch((err) => {
-			//console.log('asdlfkjasldkfjlaskdjflksdjfkl')
-			getPic(zzArr)
-		});
-	} catch (e) {
+// 		}).catch((err) => {
+// 			//console.log('asdlfkjasldkfjlaskdjflksdjfkl')
+// 			getPic(zzArr)
+// 		});
+// 	} catch (e) {
 
-	}
-
-
-}
+// 	}
 
 
-let robotAction = (xy, mouse, key, fun) => {
-	
-	setTimeout(() => {
-		let nowpy = robot.getMousePos()
-		var pyxc = (nowpy.x - xy[0]) / 10, pyyc = (nowpy.y - xy[1]) / 10
-		for (let i = 0; i <= 10; i++) {
-			robot.moveMouse(nowpy.x - pyxc * i, nowpy.y - pyyc * i);
-		}
-		thenFun = (zz, py) => {
-			//func.getPx()
-			y = py.y + (xy[1] - zz[1])
-			x = py.x + (xy[0] - zz[0])
-			tx = Math.abs(xy[0] - zz[0])
-			ty = Math.abs(xy[1] - zz[1])
-			let ofsets = global.nowObj.ofset || [5, 5]
-			if ((tx < ofsets[0] && ty < ofsets[1]) || !zz[0]) {
-				if (global.nowObj.check == 'npc') {
-					for (let i = 0; i <= 10; i++) {
-						robot.moveMouse(py.x, py.y - i * 10);//sdfasdf
-					}
-				}
+// }
 
-				var pp = new Promise((resolve, reject) => {
-					if (global.nowObj.checkBefore) {
-						func.getPx([global.icons[global.nowObj.checkBefore]], (a, b) => {
-							
-							switch (global.nowObj.type) {
-								case 'have'://存在继续执行
-									!a[0] && resolve(true)
-									break;
-								case 'have1'://存在重新执行
-									a[0] && robotFun()
-									break;
-								case 'have-1'://存在执行上一个
-									a[0] && zzIndex-- && robotFun()
-									break;
-								case 'have+1'://存在执行下一个
-									a[0] && zzIndex++ && robotFun()
-									break;
-								case 'notfont1'://不存在重新
-								 !a[0] && robotFun()
-									break;
-								case 'notfont'://不存在继续执行
-								 !a[0] && resolve(true)
-									break;
-								case 'notfont-1'://不存在执行上一个
-								console.log(a[0])
-								!a[0] && zzIndex-- && robotFun()
-									resolve(false)
-									break;
-								case 'notfont+1'://不存在执行上一个
-								!a[0] && zzIndex++ && robotFun()
-									break;
-								case 'dididi':
-									if(!a[0] || b[0].length <7){
-										setInterval(()=>{
-											process.stdout.write('\x07')
-										},500)
-									}else if(a[0] && b[0].length >=7){
-										resolve(true)
-									}else{
-										setInterval(()=>{
-											process.stdout.write('\x07')
-										},500)
-									}
-									return;
-								default:
-									resolve(true)
-							}
-							resolve(true)
-						})
-					}else{
-						resolve(true)
-					}
 
-				});
-				//在那之前的判断
-				Promise.all([pp]).then((values) => {
-					if(!values[0])return;
-					global.nowObj.beforeKey && robot.keyTap(...global.nowObj.beforeKey)
-					global.nowObj.beforeKeyArr && global.nowObj.beforeKeyArr.forEach((item) => {
-						robot.keyTap(item)
-					})
-					setTimeout(() => {
-						mouse && robot.mouseClick(mouse)
-						setTimeout(() => {
+let robotAction =func.robotAction//|| (xy, mouse, key, fun) => {
+// 	setTimeout(() => {
+// 		let nowpy = robot.getMousePos()
+// 		var pyxc = (nowpy.x - xy[0]) / 10, pyyc = (nowpy.y - xy[1]) / 10
+// 		for (let i = 0; i <= 10; i++) {
+// 			robot.moveMouse(nowpy.x - pyxc * i, nowpy.y - pyyc * i);
+// 		}
+// 		thenFun = (zz, py) => {
+// 			//func.getPx()
+// 			y = py.y + (xy[1] - zz[1])
+// 			x = py.x + (xy[0] - zz[0])
+// 			tx = Math.abs(xy[0] - zz[0])
+// 			ty = Math.abs(xy[1] - zz[1])
+// 			let ofsets = global.nowObj.ofset || [5, 5]
+// 			if ((tx < ofsets[0] && ty < ofsets[1]) || !zz[0]) {
+// 				if (global.nowObj.check == 'npc') {
+// 					for (let i = 0; i <= 10; i++) {
+// 						robot.moveMouse(py.x, py.y - i * 10);//sdfasdf
+// 					}
+// 				}
 
-							if (global.nowObj.checkAfter) return func.getPx([global.icons[global.nowObj.checkAfter]], (a, b) => {
+// 				var pp = new Promise((resolve, reject) => {
+// 					if (global.nowObj.checkBefore) {
+// 						checks[global.nowObj.checkBefore] && checks[global.nowObj.checkBefore](resolve, reject)
+
+// 					}else{
+// 						resolve(true)
+// 					}
+
+// 				});
+// 				//在那之前的判断
+// 				Promise.all([pp]).then((values) => {
+// 					if(!values[0])return;
+// 					global.nowObj.beforeKey && robot.keyTap(...global.nowObj.beforeKey)
+// 					global.nowObj.beforeKeyArr && global.nowObj.beforeKeyArr.forEach((item) => {
+// 						robot.keyTap(item)
+// 					})
+// 					setTimeout(() => {
+// 						mouse && robot.mouseClick(mouse)
+// 						setTimeout(() => {
+
+// 							if (global.nowObj.checkAfter) return func.getPx([global.icons[global.nowObj.checkAfter]], (a, b) => {
 								
-								//点击后判断是否存在某物
-								if (a[0]) {
-									robotFun()//getPic(zz[0] ? zzObj.zz : zzObj.apczz)
-								} else {
-									global.nowObj.keyArr && global.nowObj.keyArr.forEach((item) => {
+// 								//点击后判断是否存在某物
+// 								if (a[0]) {
+// 									robotFun()//getPic(zz[0] ? zzObj.zz : zzObj.apczz)
+// 								} else {
+// 									global.nowObj.keyArr && global.nowObj.keyArr.forEach((item) => {
 										
-										robot.keyTap(item)
-									})
-									global.nowObj.mcArr && global.nowObj.mcArr.forEach((item) => {
-										robot.mouseClick(item)
-									})
-									key && robot.keyTap(...key)
-									fun && fun()
-								}
-							})
-							global.nowObj.keyArr && global.nowObj.keyArr.forEach((item) => {
+// 										robot.keyTap(item)
+// 									})
+// 									global.nowObj.mcArr && global.nowObj.mcArr.forEach((item) => {
+// 										robot.mouseClick(item)
+// 									})
+// 									key && robot.keyTap(...key)
+// 									fun && fun()
+// 								}
+// 							})
+// 							global.nowObj.keyArr && global.nowObj.keyArr.forEach((item) => {
 								
-								robot.keyTap(item)
-							})
-							global.nowObj.mcArr && global.nowObj.mcArr.forEach((item) => {
-								robot.mouseClick(item)
-							})
-							key && robot.keyTap(...key)
-							fun && fun()
-						}, 200)
-					}, 100)
+// 								robot.keyTap(item)
+// 							})
+// 							global.nowObj.mcArr && global.nowObj.mcArr.forEach((item) => {
+// 								robot.mouseClick(item)
+// 							})
+// 							key && robot.keyTap(...key)
+// 							fun && fun()
+// 						}, 200)
+// 					}, 100)
 
-				})
+// 				})
 
 
 
-				return
-			}
-			if (!zz[0]) {
-				x = xy[0], y = xy[1]
-			}
-			let nowpys = robot.getMousePos()
-			var pyxcs = (nowpys.x - x) / 3, pyycs = (nowpys.y - y) / 3
-			for (let i = 0; i <= 3; i++) {
-				robot.moveMouse(nowpys.x - pyxcs * i, nowpys.y - pyycs * i);
-			}
-			robot.moveMouse(x, y);
-			getPic(zz[0] ? zzObj.zz : zzObj.apczz)
+// 				return
+// 			}
+// 			if (!zz[0]) {
+// 				x = xy[0], y = xy[1]
+// 			}
+// 			let nowpys = robot.getMousePos()
+// 			var pyxcs = (nowpys.x - x) / 3, pyycs = (nowpys.y - y) / 3
+// 			for (let i = 0; i <= 3; i++) {
+// 				robot.moveMouse(nowpys.x - pyxcs * i, nowpys.y - pyycs * i);
+// 			}
+			
+// 			if(!zz[0]){
+// 				robot.moveMouse(global.windowPixel.x +100, global.windowPixel.y+100);
+// 			}
+// 			getPic(zzObj.zz)
 
-		}
-		ok = () => {
-			robot.mouseClick(mouse)
-		}
-		getPic(zzObj.zz)
+// 		}
+// 		ok = () => {
+// 			robot.mouseClick(mouse)
+// 		}
+// 		getPic(zzObj.zz)
 
-	}, 50)
-}
+// 	}, 50)
+// }
 
 let arrs = []
 
@@ -311,9 +267,9 @@ let getCQArr = (ins) => {
 				x = 334 + 51 * (index % 5)
 				y = 154 + 51 * parseInt(index / 5)
 			}
-			return { xy: [x, y], key: false, mouseKey: 'right', ofset: [17, 17] ,checkBefore: index==0&&'gml', type: 'notfont'}
+			return { xy: [x, y], key: false, mouseKey: 'right', ofset: [17, 17] ,checkBefore: index==0&&'djl', type: 'notfont'}
 		})),
-		{ xy: [488, 309], key: false, mouseKey: 'right' },//打开飞行符
+		{ xy: [488, 309], key: false, mouseKey: 'right',checkBefore:'djl' },//打开飞行符
 		{ xy: [222, 193], mouseKey: 'left', ofset: [5, 5], checkAfter: 'zzffIcon',checkBefore: 'zzffIcon', type: 'notfont' },//前往宝象国 关闭物品栏 并判断是否已经完成飞行;
 		{ xy: [440, 370], beforeKey: ['f9'], key: ['e', 'alt'],  ofset: [3000, 30000] }, //关闭物品栏
 		{ xy: [323, 177], mouseKey: 'left', check: 'npc' },//打开仓库管理员
@@ -393,59 +349,59 @@ let heQi = (ts) => {
 }
 let nnk = 0
 var zzArr = [
-	// { xy: [537, 309], key: false, mouseKey: 'right', check: 'buqi' ,checkBefore: 'djl', type: 'dididi' },
-	// nnk === 1 ?
-	// 	{ xy: [133, 130], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [363, 116], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [556, 110], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },//长安
-	// //打开仙灵店铺并选择
-	// ...getCQArr(0),
-	// { xy: [537, 309], key: false, mouseKey: 'right' },
-	// nnk === 1 ?
-	// 	{ xy: [511, 126], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [274, 172], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [512, 215], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
-	// ...getCQArr(1),
-	// { xy: [537, 309], key: false, mouseKey: 'right' },
-	// nnk === 1 ?
-	// 	{ xy: [184, 221], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [248, 241], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [591, 379], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
-	// ...getCQArr(2),
-	// { xy: [537, 309], key: false, mouseKey: 'right' },
-	// nnk === 1 ?
-	// 	{ xy: [311, 274], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [393, 236], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [374, 368], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
-	// ...getCQArr(3),
-	// { xy: [537, 309], key: false, mouseKey: 'right' },
-	// nnk === 1 ?
-	// 	{ xy: [468, 250], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [237, 339], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [327, 339], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
-	// ...getCQArr(4),
-	// { xy: [537, 309], key: false, mouseKey: 'right' },
-	// nnk === 1 ?
-	// 	{ xy: [437, 348], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [287, 358], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [59, 377], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
-	// ...getCQArr(5),
-	// { xy: [537, 309], key: false, mouseKey: 'right' },
-	// nnk === 1 ?
-	// 	{ xy: [211, 323], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [409, 374], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [245, 212], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
-	// ...getCQArr(6),
+	{ xy: [537, 309], key: false, mouseKey: 'right', check: 'buqi' ,checkBefore: 'djl', type: 'dididi' },
+	nnk === 1 ?
+		{ xy: [133, 130], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [363, 116], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [556, 110], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },//长安
+	//打开仙灵店铺并选择
+	...getCQArr(0),
+	{ xy: [537, 309], key: false, mouseKey: 'right' },
+	nnk === 1 ?
+		{ xy: [511, 126], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [274, 172], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [512, 215], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
+	...getCQArr(1),
+	{ xy: [537, 309], key: false, mouseKey: 'right' },
+	nnk === 1 ?
+		{ xy: [184, 221], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [248, 241], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [591, 379], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
+	...getCQArr(2),
+	{ xy: [537, 309], key: false, mouseKey: 'right' },
+	nnk === 1 ?
+		{ xy: [311, 274], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [393, 236], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [374, 368], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
+	...getCQArr(3),
+	{ xy: [537, 309], key: false, mouseKey: 'right' },
+	nnk === 1 ?
+		{ xy: [468, 250], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [237, 339], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [327, 339], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
+	...getCQArr(4),
+	{ xy: [537, 309], key: false, mouseKey: 'right' },
+	nnk === 1 ?
+		{ xy: [437, 348], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [287, 358], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [59, 377], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
+	...getCQArr(5),
+	{ xy: [537, 309], key: false, mouseKey: 'right' },
+	nnk === 1 ?
+		{ xy: [211, 323], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [409, 374], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [245, 212], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
+	...getCQArr(6),
 
-	//...made777(0),
-	//...made777(1),
+	...made777(0),
+	...made777(1),
 	...made777(2),
 	...made777(3),
 	...made777(4),

@@ -272,9 +272,9 @@ let getCQArr = (ins) => {
 		{ xy: [488, 309], key: false, mouseKey: 'right',checkBefore:'djl' },//打开飞行符
 		{ xy: [222, 193], mouseKey: 'left', ofset: [5, 5], checkAfter: 'zzffIcon',checkBefore: 'zzffIcon', type: 'notfont' },//前往宝象国 关闭物品栏 并判断是否已经完成飞行;
 		{ xy: [440, 370], beforeKey: ['f9'], key: ['e', 'alt'],  ofset: [3000, 30000] }, //关闭物品栏
-		{ xy: [323, 177], mouseKey: 'left', check: 'npc' },//打开仓库管理员
-		{ xy: [143, 316], mouseKey: 'left', beforeKey: ['f9'], checkBefore: 'cktext', type: 'have' },//进入仓库
-		{ xy: [55 + ins * 19, 386], mouseKey: 'left' },//选择指定仓库
+		// { xy: [323, 177], mouseKey: 'left', check: 'npc' },//打开仓库管理员
+		// { xy: [143, 316], mouseKey: 'left', beforeKey: ['f9'], checkBefore: 'cktext', type: 'have' },//进入仓库
+		{ xy: [55 + ins * 19, 386], mouseKey: 'left', checkBefore:'ck'},//选择指定仓库
 		...(new Array(18).fill({}).map((item, index) => {//放入仓库
 			let x = 371, y = 185
 			if (index % 5 == 0) {
@@ -349,28 +349,28 @@ let heQi = (ts) => {
 }
 let nnk = 0
 var zzArr = [
-	{ xy: [537, 309], key: false, mouseKey: 'right', check: 'buqi' ,checkBefore: 'djl', type: 'dididi' },
-	nnk === 1 ?
-		{ xy: [133, 130], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-		nnk === 2 ?
-			{ xy: [363, 116], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-			{ xy: [556, 110], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },//长安
-	//打开仙灵店铺并选择
-	...getCQArr(0),
-	{ xy: [537, 309], key: false, mouseKey: 'right' },
-	nnk === 1 ?
-		{ xy: [511, 126], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-		nnk === 2 ?
-			{ xy: [274, 172], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-			{ xy: [512, 215], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
-	...getCQArr(1),
-	{ xy: [537, 309], key: false, mouseKey: 'right' },
-	nnk === 1 ?
-		{ xy: [184, 221], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-		nnk === 2 ?
-			{ xy: [248, 241], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-			{ xy: [591, 379], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
-	...getCQArr(2),
+	// { xy: [537, 309], key: false, mouseKey: 'right', check: 'buqi' ,checkBefore: 'djl', type: 'dididi' },
+	// nnk === 1 ?
+	// 	{ xy: [133, 130], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+	// 	nnk === 2 ?
+	// 		{ xy: [363, 116], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+	// 		{ xy: [556, 110], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },//长安
+	// //打开仙灵店铺并选择
+	// ...getCQArr(0),
+	// { xy: [537, 309], key: false, mouseKey: 'right',checkBefore: 'djl' },
+	// nnk === 1 ?
+	// 	{ xy: [511, 126], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+	// 	nnk === 2 ?
+	// 		{ xy: [274, 172], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+	// 		{ xy: [512, 215], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
+	// ...getCQArr(1),
+	// { xy: [537, 309], key: false, mouseKey: 'right' ,checkBefore: 'djl'},
+	// nnk === 1 ?
+	// 	{ xy: [184, 221], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+	// 	nnk === 2 ?
+	// 		{ xy: [248, 241], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+	// 		{ xy: [591, 379], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
+	// ...getCQArr(2),
 	{ xy: [537, 309], key: false, mouseKey: 'right' },
 	nnk === 1 ?
 		{ xy: [311, 274], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
@@ -426,8 +426,8 @@ var zzArr = [
 
 
 
-let zzIndex = 0;
-var robotFun = () => {
+global.zzIndex = 0;
+global.robotFun = () => {
 	if (!isOpen) {
 		//zzIndex = 0
 		return false
@@ -439,59 +439,14 @@ var robotFun = () => {
 	let x = zzArr[zzIndex].xy[0] + global.windowPixel.x, y = zzArr[zzIndex].xy[1] + global.windowPixel.y
 
 	switch (global.nowObj.check) {
-		case 'Arr77'://查看上一层还有多少个
-			zzIndex = 0;
-			robotFun()
-			return;
-			robot.moveMouse(x, y);
-			robot.mouseClick('left')
-			setTimeout(() => {
-				func.getPx([global.icons.bggezi], (a, b) => {
-					robot.moveMouse(global.windowPixel.x + 80, global.windowPixel.y - 14);
-					robot.mouseClick('left')
-					global.giveArr = b[0]
-					zzIndex++
-					robotFun()
-				})
-			}, 500)
-			break;
-		case 'give':
-			global.giveAs = global.giveAs//执行的动作
-			for (let i = 0; i < global.giveArr.length; i++) {
-				if (i % 3 == 0) {
-					global.giveAs.push({ xy: [454, 390], mouseKey: 'left', check: 'giveBQ' })//点击给与
-					global.giveAs.push({ xy: [454, 390], mouseKey: 'left', check: 'giveBQ' })
-				} else if (i == 4) {
-					global.giveAs.push({ xy: [321, 447], mouseKey: 'left', check: 'give' })//选好 给与
-				} else {
-					if (i % 5 == 0) {
-						x = 68
-						y = 186 + 51 * parseInt(index / 5)
-					} else {
-						x = 68 + 51 * (index % 5)
-						y = 186 + 51 * parseInt(index / 5)
-					}
-					global.giveAs.push({ xy: [323, 449], mouseKey: 'left', check: 'give' })//选择
-				}
-
-			}
-			break;
-		case 'giveBQ':
-			robotAction([x, y], zzArr[zzIndex].mouseKey, zzArr[zzIndex].key, () => {
-				zzIndex++
-				if (!zzArr[zzIndex]) zzIndex = 0
-				
-				robotFun()
-			});
-			break;
 		default:
-			robotAction([x, y], zzArr[zzIndex].mouseKey, zzArr[zzIndex].key, () => {
+			robotAction({...zzArr[zzIndex], fun:() => {
 				zzIndex++
 				global.giveAs = []
 				if (!zzArr[zzIndex]) zzIndex = 0
 				
 				robotFun()
-			});
+			}});
 	}
 
 

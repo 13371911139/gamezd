@@ -176,8 +176,9 @@ const datas =func = {
             console.log(err);
         });
     },
-    robotAction: (xy, mouse, key, fun) => {
+    robotAction: (obj) => {
         let getPic=datas.getPic
+        let xy=[obj.xy[0] + global.windowPixel.x,obj.xy[1] + global.windowPixel.y],mouse=obj.mouseKey,key=obj.key,fun=obj.fun
         setTimeout(() => {
             let nowpy = robot.getMousePos()
             var pyxc = (nowpy.x - xy[0]) / 10, pyyc = (nowpy.y - xy[1]) / 10
@@ -202,7 +203,7 @@ const datas =func = {
                     var pp = new Promise((resolve, reject) => {
                         if (global.nowObj.checkBefore) {
                             console.log('开始验证执行条件判断',global.nowObj.checkBefore)
-                            checks[global.nowObj.checkBefore] ? checks[global.nowObj.checkBefore](resolve, reject):false&&resolve(true)
+                            checks[global.nowObj.checkBefore] ? checks[global.nowObj.checkBefore]({resolve, reject}):false&&resolve(true)
     
                         }else{
                             console.log('位置坐标验证通过')

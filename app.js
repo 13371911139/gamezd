@@ -325,7 +325,7 @@ let made777 = (ins) => {
 		...heQi(),
 		...heQi(true),
 		{ xy: [414, 119], key: ['e', 'alt'], mouseKey: 'right', ofset: [20, 20] },//关闭法宝并关闭物品栏
-		{ xy: [57, 423], key: false, mouseKey: 'left' , checkBefore: 'djl', type: 'have-1'},//进入8号仓库
+		{ xy: [57, 423], key: false, mouseKey: 'left' , type: 'have-1'},//进入8号仓库
 		{ xy: [379, 185], key: false, mouseKey: 'right', ofset: [13, 13] },//把77放入仓库
 		{ xy: [428, 188], key: false, mouseKey: 'right', ofset: [13, 13] },//把77放入仓库
 	]
@@ -349,28 +349,28 @@ let heQi = (ts) => {
 }
 let nnk = 0
 var zzArr = [
-	// { xy: [537, 309], key: false, mouseKey: 'right', check: 'buqi' ,checkBefore: 'djl', type: 'dididi' },
-	// nnk === 1 ?
-	// 	{ xy: [133, 130], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [363, 116], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [556, 110], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },//长安
-	// //打开仙灵店铺并选择
-	// ...getCQArr(0),
-	// { xy: [537, 309], key: false, mouseKey: 'right',checkBefore: 'djl' },
-	// nnk === 1 ?
-	// 	{ xy: [511, 126], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [274, 172], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [512, 215], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
-	// ...getCQArr(1),
-	// { xy: [537, 309], key: false, mouseKey: 'right' ,checkBefore: 'djl'},
-	// nnk === 1 ?
-	// 	{ xy: [184, 221], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
-	// 	nnk === 2 ?
-	// 		{ xy: [248, 241], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-	// 		{ xy: [591, 379], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
-	// ...getCQArr(2),
+	{ xy: [537, 309], key: false, mouseKey: 'right', check: 'buqi' ,checkBefore: 'djl', type: 'dididi' },
+	nnk === 1 ?
+		{ xy: [133, 130], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [363, 116], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [556, 110], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },//长安
+	//打开仙灵店铺并选择
+	...getCQArr(0),
+	{ xy: [537, 309], key: false, mouseKey: 'right',checkBefore: 'djl' },
+	nnk === 1 ?
+		{ xy: [511, 126], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [274, 172], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [512, 215], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
+	...getCQArr(1),
+	{ xy: [537, 309], key: false, mouseKey: 'right' ,checkBefore: 'djl'},
+	nnk === 1 ?
+		{ xy: [184, 221], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
+		nnk === 2 ?
+			{ xy: [248, 241], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
+			{ xy: [591, 379], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
+	...getCQArr(2),
 	{ xy: [537, 309], key: false, mouseKey: 'right' },
 	nnk === 1 ?
 		{ xy: [311, 274], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来

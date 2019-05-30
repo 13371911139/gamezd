@@ -92,15 +92,15 @@ const check = {
             }
         })
     },
-    ...(()=>{
-        let ck={}
-        for(let i =1;i<=7;i++){
-            ck['ck'+i]=(obj) => {
-                func.getPx([global.icons['ck'+i]], (a, b) => {
+    ...(() => {
+        let ck = {}
+        for (let i = 1; i <= 7; i++) {
+            ck['ck' + i] = (obj) => {
+                func.getPx([global.icons['ck' + i]], (a, b) => {
                     if (!a[0]) {
                         func.robotAction({
-                            ...global.nowObj, fun: () => {
-                                check['ck'+i](obj)
+                            xy: [55 + i * 19, 386], mouseKey: 'left', checkBefore:'ck', fun: () => {
+                                check['ck' + i](obj)
                             }
                         })
                     } else {
@@ -108,29 +108,71 @@ const check = {
                     }
                 })
             }
-           
+
         }
         return ck
     })(),
-    ck:(obj)=>{
+    ck: (obj) => {
         //判断是否再西凉ff位置，不是飞一下否则判断是否打开仓库，没打开去打开打开了就继续
-       // { xy: [323, 177], mouseKey: 'left', check: 'npc' },//打开仓库管理员
-		// { xy: [143, 316], mouseKey: 'left', beforeKey: ['f9'], checkBefore: 'cktext', type: 'have' },//进入仓库
-        func.getPx([global.icons.cktext], (a, b) => {
-            if (!a[0]) {
+        // { xy: [323, 177], mouseKey: 'left', check: 'npc' },//打开仓库管理员
+        // { xy: [143, 316], mouseKey: 'left', beforeKey: ['f9'], checkBefore: 'cktext', type: 'have' },//进入仓库
+        func.getPx([global.icons.ck, global.icons.xlff], (a, b) => {
+            if (!a[0], !a[1]) {
+                console.log('没有打开仓库且没有在西凉ff')
                 func.robotAction({
-                    xy: [143, 316], checkBefore: 'cktext', fun: () => {
+                    xy: [143, 316], checkBefore: 'djl', fun: () => {
                         check.cktext(obj)
                     }
                 })
+            } else if (a[0] && !a[1]) {
+                console.log('仓库存在但是位置不是西凉ff')
+                func.robotAction({
+                    xy: [143, 316], checkBefore: 'cktext', fun: () => {
+                        check.ck(obj)
+                    }
+                })
 
-
+            } else if (!a[0] && a[1]) {
+                console.log('我在西凉ff但是没有打开仓库')
+                func.robotAction({
+                    xy: [323, 177], mouseKey: 'left', check: 'npc', fun: () => {
+                        func.robotAction({
+                            xy: [143, 316], mouseKey: 'left', beforeKey: ['f9'], checkBefore: 'cktext', type: 'have', fun: () => {
+                                check.ck(obj)
+                            }
+                        })
+                    }
+                })
             } else {
                 obj.fun ? obj.fun(obj) : obj.resolve(true)
             }
         })
-    }
+    },
+    fbl: (obj) => {
+        console.log('验证道具栏是否打开,延迟截图50毫秒')
+        func.getPx([global.icons.fbl], (a, b) => {
+            if (!a[0]) {
+                console.log('未打开物品栏，开始执行打开物品栏操作')
+                robot.keyTap('e', 'alt')
+                check.djl(obj)
+            } else {
+                console.log('法宝栏已打开，开始执行后续操作', obj.fun)
+                obj.fun ? obj.fun(obj) : obj.resolve(true)
+            }
+        })
 
+    },
+    select77:(obj)=>{
+        func.getPx([global.icons.select77], (a, b) => {
+            if (!a[0]) {
+                console.log('未打开物品栏，开始执行打开物品栏操作')
+                robot.keyTap('e', 'alt')
+                check.djl(obj)
+            } else {
+                console.log('法宝栏已打开，开始执行后续操作', obj.fun)
+                obj.fun ? obj.fun(obj) : obj.resolve(true)
+            }
+        })
+    }
 }
-console.log(check)
 module.exports = check

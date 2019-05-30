@@ -163,6 +163,7 @@ const check = {
 
     },
     select77:(obj)=>{
+        
         func.getPx([global.icons.select77], (a, b) => {
             if (!a[0]) {
                 console.log('未打开物品栏，开始执行打开物品栏操作')

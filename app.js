@@ -274,7 +274,7 @@ let getCQArr = (ins) => {
 		{ xy: [440, 370], beforeKey: ['f9'], key: ['e', 'alt'],  ofset: [3000, 30000] }, //关闭物品栏
 		// { xy: [323, 177], mouseKey: 'left', check: 'npc' },//打开仓库管理员
 		// { xy: [143, 316], mouseKey: 'left', beforeKey: ['f9'], checkBefore: 'cktext', type: 'have' },//进入仓库
-		{ xy: [55 + ins * 19, 386], mouseKey: 'left', checkBefore:'ck'},//选择指定仓库
+		{ xy: [55 + ins * 19, 386], mouseKey: 'left', checkmBefore:'ck'},//选择指定仓库
 		...(new Array(18).fill({}).map((item, index) => {//放入仓库
 			let x = 371, y = 185
 			if (index % 5 == 0) {
@@ -284,7 +284,7 @@ let getCQArr = (ins) => {
 				x = x + 51 * (index % 5)
 				y = y + 51 * parseInt(index / 5)
 			}
-			return { xy: [x, y], key: false, mouseKey: 'right', ofset: [10, 10] , checkBefore: index==0 && 'ck'+(ins+1), type: 'have'}
+			return { xy: [x, y], key: false, mouseKey: 'right', ofset: [10, 10] , checkmBefore: index==0 && 'ck'+(ins+1), type: 'have'}
 		})),
 		//ins == 6 ? { xy: [319, 353], ofset: [1117, 1711] } : { xy: [319, 353], key: false, mouseKey: 'right', ofset: [17, 17] },//关闭仓库打开背包继续下一个
 		ins == 6 ? { xy: [319, 353], ofset: [1117, 1711] } : { xy: [319, 353], key: ['e', 'alt'], ofset: [175, 157] },
@@ -304,7 +304,7 @@ let made777 = (ins) => {
 			x = 68 + 51 * (index % 5)
 			y = 186 + 51 * parseInt(index / 5)
 		}
-		arr77.push({ xy: [x, y], key: false, mouseKey: 'right', ofset: [10, 10] , checkBefore: 'ck'+(i+1), type: 'notfont-1'})//取第一个旗子
+		arr77.push({ xy: [x, y], key: false, mouseKey: 'right', ofset: [10, 10] , checkmBefore: 'ck'+(i+1), type: 'notfont-1'})//取第一个旗子
 		index++
 		if (index % 5 == 0) {
 			x = 68

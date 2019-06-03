@@ -176,64 +176,31 @@ const datas = func = {
             console.log(err);
         });
     },
-
-    // for(var i = 0; i < ce.length; i++){ 
-    //     if(i == 2){
-    //         for(let j = 0; j<ce[i].length; j++){
-    //             if(i ==2 && j == 1){
-    //                 for(let k = 0; k<ce[i][j].lenth; k++){
-    //                     if(i==2 && j==1&& k==2){
-    //                         for(let l =0; l < ce[i][j][k].length; l++){
-    //                             console.log(ce[i][j][k][l])
-    //                         }
-    //                     }else{
-    //                         console.log(ce[i][j][k])
-    //                     }
-                        
-    //                 }
-    //             }else{
-    //                 console.log(ce[[i][j]])
-    //             }
-                
-    //         }
-    //         }else{
-    //             console.log(ce[i])
-    //         }
-    //     }
-
-
-
-
     robotAction: (obj) => {
         let getPic = datas.getPic
         let nowpy = robot.getMousePos()
         let xy = [obj.xy[0] + global.windowPixel.x, obj.xy[1] + global.windowPixel.y], mouse = obj.mouseKey, key = obj.key, fun = obj.fun
-        var pyxc = (nowpy.x - global.windowPixel.x-595) / 5, pyyc = (nowpy.y -global.windowPixel.y-36) / 5
-        for (let i = 0; i <= 5; i++) {
-            robot.moveMouse(nowpy.x - pyxc * i, nowpy.y - pyyc * i);
-        }
+
+        var pyxc = (nowpy.x - global.windowPixel.x - 595) / 5, pyyc = (nowpy.y - global.windowPixel.y - 36) / 5
+        
         setTimeout(() => {
-            let nowpy = robot.getMousePos()
-            var pp = new Promise((resolve, reject) => {
-                if (obj.checkBefore) {
-                    console.log('开始验证执行条件判断', obj.checkBefore)
-                    checks[obj.checkBefore] ? checks[obj.checkBefore]({ resolve, reject }) : false && resolve(true)
+            //let nowpy = robot.getMousePos()
+            Promise.all([
+                new Promise((resolve, reject) => {
+                    if (obj.checkmBefore) {
+                        for (let i = 0; i <= 5; i++) {
+                            robot.moveMouse(nowpy.x - pyxc * i, nowpy.y - pyyc * i);
+                        }
+                        console.log('开始验证执行条件判断', obj.checkBefore)
+                        checks[obj.checkmBefore] ? checks[obj.checkmBefore]({ resolve, reject }) : resolve(true)
 
-                } else {
-                    console.log('位置坐标验证通过')
-                    resolve(true)
-                }
+                    } else {
+                        console.log('位置坐标验证通过')
+                        resolve(true)
+                    }
 
-            });
-            //在那之前的判断
-            Promise.all([pp]).then((values) => {
-                if (!values[0]) return;
-
-
-
-
-
-
+                })
+            ]).then((values) => {
                 var pyxc = (nowpy.x - xy[0]) / 10, pyyc = (nowpy.y - xy[1]) / 10
                 for (let i = 0; i <= 10; i++) {
                     robot.moveMouse(nowpy.x - pyxc * i, nowpy.y - pyyc * i);
@@ -247,49 +214,65 @@ const datas = func = {
                     let ofsets = obj.ofset || [5, 5]
                     if ((tx < ofsets[0] && ty < ofsets[1]) || !zz[0]) {
                         console.log('位置坐标验证通过')
+
                         if (obj.check == 'npc') {
                             for (let i = 0; i <= 10; i++) {
                                 robot.moveMouse(py.x, py.y - i * 10);//sdfasdf
                             }
                         }
 
+                        var pp = new Promise((resolve, reject) => {
+                            if (obj.checkBefore) {
+                                
+                                console.log('开始验证执行条件判断', obj.checkBefore)
+                                checks[obj.checkBefore] ? setTimeout(()=>checks[obj.checkBefore]({ resolve, reject }),200) : false && resolve(true)
 
-                        obj.beforeKey && robot.keyTap(...obj.beforeKey)
-                        obj.beforeKeyArr && obj.beforeKeyArr.forEach((item) => {
-                            robot.keyTap(item)
-                        })
-                        setTimeout(() => {
-                            mouse && robot.mouseClick(mouse)
+                            } else {
+                                console.log('位置坐标验证通过')
+                                resolve(true)
+                            }
+
+                        });
+                        //在那之前的判断
+                        Promise.all([pp]).then((values) => {
+                            if (!values[0]) return;
+                            obj.beforeKey && robot.keyTap(...obj.beforeKey)
+                            obj.beforeKeyArr && obj.beforeKeyArr.forEach((item) => {
+                                robot.keyTap(item)
+                            })
                             setTimeout(() => {
+                                mouse && robot.mouseClick(mouse)
+                                setTimeout(() => {
 
-                                if (obj.checkAfter) return func.getPx([global.icons[obj.checkAfter]], (a, b) => {
+                                    if (obj.checkAfter) return func.getPx([global.icons[obj.checkAfter]], (a, b) => {
 
-                                    //点击后判断是否存在某物
-                                    if (a[0]) {
-                                        robotFun()//getPic(zz[0] ? zzObj.zz : zzObj.apczz)
-                                    } else {
-                                        obj.keyArr && obj.keyArr.forEach((item) => {
+                                        //点击后判断是否存在某物
+                                        if (a[0]) {
+                                            robotFun()//getPic(zz[0] ? zzObj.zz : zzObj.apczz)
+                                        } else {
+                                            obj.keyArr && obj.keyArr.forEach((item) => {
 
-                                            robot.keyTap(item)
-                                        })
-                                        obj.mcArr && obj.mcArr.forEach((item) => {
-                                            robot.mouseClick(item)
-                                        })
-                                        key && robot.keyTap(...key)
-                                        fun && fun()
-                                    }
-                                })
-                                obj.keyArr && obj.keyArr.forEach((item) => {
+                                                robot.keyTap(item)
+                                            })
+                                            obj.mcArr && obj.mcArr.forEach((item) => {
+                                                robot.mouseClick(item)
+                                            })
+                                            key && robot.keyTap(...key)
+                                            fun && fun()
+                                        }
+                                    })
+                                    obj.keyArr && obj.keyArr.forEach((item) => {
 
-                                    robot.keyTap(item)
-                                })
-                                obj.mcArr && obj.mcArr.forEach((item) => {
-                                    robot.mouseClick(item)
-                                })
-                                key && robot.keyTap(...key)
-                                fun && fun()
-                            }, 200)
-                        }, 100)
+                                        robot.keyTap(item)
+                                    })
+                                    obj.mcArr && obj.mcArr.forEach((item) => {
+                                        robot.mouseClick(item)
+                                    })
+                                    key && robot.keyTap(...key)
+                                    fun && fun()
+                                }, 200)
+                            }, 100)
+                        })
                         return
                     }
                     if (!zz[0]) {

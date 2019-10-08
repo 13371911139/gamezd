@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "np": "node ./app.js"
+    "np": "node ./app.js",
+    "dnf": "set NODE_SE=dnf && node  ./DNF"
   },
   "author": "",
   "license": "ISC",

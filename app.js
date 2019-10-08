@@ -1,10 +1,12 @@
 
 const robot = require("robotjs")
+//import robot from 'robotjs'
 const getPixels = require("get-pixels")
 const screenshot = require('screenshot-desktop')
-const checks=require('./check/index')
+const checks = require('./check/index')
 var gm = require('gm');
 var events = require("events");
+let PS = require('./paoshang/index')
 var twoPI = Math.PI * 2.0;
 robot.setMouseDelay(20);
 robot.setKeyboardDelay(200)
@@ -13,6 +15,11 @@ var height = (screenSize.height / 2) - 10;
 var width = screenSize.width;
 global.isOpen = false
 const path = './'
+var dnf=require('./DNF')
+
+if(process.env.NODE_SE=='dnf'){
+	return false;
+}
 
 // robot.mouseClick=(mouse)=>{
 
@@ -62,7 +69,7 @@ setTimeout(function () {
 	//func.getWindow()
 	//console.log(global.icons)
 	func.getPx([global.icons.ca777], (a, b) => {
-		
+
 	})
 }, 10000)
 let zz = [], apczz = []
@@ -132,7 +139,7 @@ let getZZPx = (zz, imgPath) => {
 
 	return nowPy
 }
-let getPic =func.getPic// (zzArr) => {
+let getPic = func.getPic// (zzArr) => {
 // 	let imgPaths
 // 	try {
 // 		screenshot({ filename: 'shot.png' }).then((imgPath) => {
@@ -150,7 +157,7 @@ let getPic =func.getPic// (zzArr) => {
 // }
 
 
-let robotAction =func.robotAction//|| (xy, mouse, key, fun) => {
+let robotAction = func.robotAction//|| (xy, mouse, key, fun) => {
 // 	setTimeout(() => {
 // 		let nowpy = robot.getMousePos()
 // 		var pyxc = (nowpy.x - xy[0]) / 10, pyyc = (nowpy.y - xy[1]) / 10
@@ -192,13 +199,13 @@ let robotAction =func.robotAction//|| (xy, mouse, key, fun) => {
 // 						setTimeout(() => {
 
 // 							if (global.nowObj.checkAfter) return func.getPx([global.icons[global.nowObj.checkAfter]], (a, b) => {
-								
+
 // 								//点击后判断是否存在某物
 // 								if (a[0]) {
 // 									robotFun()//getPic(zz[0] ? zzObj.zz : zzObj.apczz)
 // 								} else {
 // 									global.nowObj.keyArr && global.nowObj.keyArr.forEach((item) => {
-										
+
 // 										robot.keyTap(item)
 // 									})
 // 									global.nowObj.mcArr && global.nowObj.mcArr.forEach((item) => {
@@ -209,7 +216,7 @@ let robotAction =func.robotAction//|| (xy, mouse, key, fun) => {
 // 								}
 // 							})
 // 							global.nowObj.keyArr && global.nowObj.keyArr.forEach((item) => {
-								
+
 // 								robot.keyTap(item)
 // 							})
 // 							global.nowObj.mcArr && global.nowObj.mcArr.forEach((item) => {
@@ -234,7 +241,7 @@ let robotAction =func.robotAction//|| (xy, mouse, key, fun) => {
 // 			for (let i = 0; i <= 3; i++) {
 // 				robot.moveMouse(nowpys.x - pyxcs * i, nowpys.y - pyycs * i);
 // 			}
-			
+
 // 			if(!zz[0]){
 // 				robot.moveMouse(global.windowPixel.x +100, global.windowPixel.y+100);
 // 			}
@@ -255,7 +262,7 @@ let arrs = []
 let getCQArr = (ins) => {
 	return [
 		//打开仙灵店铺并选择
-		{ xy: [324, 137], keyArr: [6, 6, 6, 6], mouseKey: 'left',checkBefore: 'gml', type: 'have' },//选中并输入数量
+		{ xy: [324, 137], keyArr: [6, 6, 6, 6], mouseKey: 'left', checkBefore: 'gml', type: 'have' },//选中并输入数量
 		{ xy: [405, 393], mouseKey: 'left' },//购买777
 		{ xy: [402, 359], key: false, mouseKey: 'right', ofset: [17, 17] },//关闭仙灵店铺
 		...(new Array(18).fill({}).map((item, index) => {
@@ -267,14 +274,14 @@ let getCQArr = (ins) => {
 				x = 334 + 51 * (index % 5)
 				y = 154 + 51 * parseInt(index / 5)
 			}
-			return { xy: [x, y], key: false, mouseKey: 'right', ofset: [17, 17] ,checkBefore: index==0&&'djl', type: 'notfont'}
+			return { xy: [x, y], key: false, mouseKey: 'right', ofset: [17, 17], checkBefore: index == 0 && 'djl', type: 'notfont' }
 		})),
-		{ xy: [488, 309], key: false, mouseKey: 'right',checkBefore:'djl' },//打开飞行符
-		{ xy: [222, 193], mouseKey: 'left', ofset: [5, 5], checkAfter: 'zzffIcon',checkBefore: 'zzffIcon', type: 'notfont' },//前往宝象国 关闭物品栏 并判断是否已经完成飞行;
-		{ xy: [440, 370], beforeKey: ['f9'], key: ['e', 'alt'],  ofset: [3000, 30000] }, //关闭物品栏
+		{ xy: [488, 309], key: false, mouseKey: 'right', checkBefore: 'djl' },//打开飞行符
+		{ xy: [222, 193], mouseKey: 'left', ofset: [5, 5], checkAfter: 'zzffIcon', checkBefore: 'zzffIcon', type: 'notfont' },//前往宝象国 关闭物品栏 并判断是否已经完成飞行;
+		{ xy: [440, 370], beforeKey: ['f9'], key: ['e', 'alt'], ofset: [3000, 30000] }, //关闭物品栏
 		// { xy: [323, 177], mouseKey: 'left', check: 'npc' },//打开仓库管理员
 		// { xy: [143, 316], mouseKey: 'left', beforeKey: ['f9'], checkBefore: 'cktext', type: 'have' },//进入仓库
-		{ xy: [55 + ins * 19, 386], mouseKey: 'left', checkmBefore:'ck'},//选择指定仓库
+		{ xy: [55 + ins * 19, 386], mouseKey: 'left', checkmBefore: 'ck' },//选择指定仓库
 		...(new Array(18).fill({}).map((item, index) => {//放入仓库
 			let x = 371, y = 185
 			if (index % 5 == 0) {
@@ -284,7 +291,7 @@ let getCQArr = (ins) => {
 				x = x + 51 * (index % 5)
 				y = y + 51 * parseInt(index / 5)
 			}
-			return { xy: [x, y], key: false, mouseKey: 'right', ofset: [10, 10] , checkmBefore: index==0 && 'ck'+(ins+1), type: 'have'}
+			return { xy: [x, y], key: false, mouseKey: 'right', ofset: [10, 10], checkmBefore: index == 0 && 'ck' + (ins + 1), type: 'have' }
 		})),
 		//ins == 6 ? { xy: [319, 353], ofset: [1117, 1711] } : { xy: [319, 353], key: false, mouseKey: 'right', ofset: [17, 17] },//关闭仓库打开背包继续下一个
 		ins == 6 ? { xy: [319, 353], ofset: [1117, 1711] } : { xy: [319, 353], key: ['e', 'alt'], ofset: [175, 157] },
@@ -304,7 +311,7 @@ let made777 = (ins) => {
 			x = 68 + 51 * (index % 5)
 			y = 186 + 51 * parseInt(index / 5)
 		}
-		arr77.push({ xy: [x, y], key: false, mouseKey: 'right', ofset: [10, 10] , checkmBefore: 'ck'+(i+1), type: 'notfont-1'})//取第一个旗子
+		arr77.push({ xy: [x, y], key: false, mouseKey: 'right', ofset: [10, 10], checkmBefore: 'ck' + (i + 1), type: 'notfont-1' })//取第一个旗子
 		index++
 		if (index % 5 == 0) {
 			x = 68
@@ -317,15 +324,15 @@ let made777 = (ins) => {
 	}
 	//打开背包 打开法宝
 	arr77.push({ xy: [208, 388], beforeKey: ['e', 'alt'], ofset: [200, 200] })
-	arr77.push({ xy: [208, 388], mouseKey: 'left' , checkBefore: 'djl', type: 'notfont-1'})//打开物品栏并点击法宝
+	arr77.push({ xy: [208, 388], mouseKey: 'left', checkBefore: 'djl', type: 'notfont-1' })//打开物品栏并点击法宝
 	//选择旗盒
-	arr77.push({ xy: [331, 175], mouseKey: 'right', ofset: [13, 13] , checkBefore: 'fbl', type: 'notfont-1'})
+	arr77.push({ xy: [331, 175], mouseKey: 'right', ofset: [13, 13], checkBefore: 'fbl', type: 'notfont-1' })
 	return [
 		...arr77,
 		...heQi(),
 		...heQi(true),
 		{ xy: [414, 119], key: ['e', 'alt'], mouseKey: 'right', ofset: [20, 20] },//关闭法宝并关闭物品栏
-		{ xy: [57, 423], key: false, mouseKey: 'left' , type: 'have-1'},//进入8号仓库
+		{ xy: [57, 423], key: false, mouseKey: 'left', type: 'have-1' },//进入8号仓库
 		{ xy: [379, 185], key: false, mouseKey: 'right', ofset: [13, 13] },//把77放入仓库
 		{ xy: [428, 188], key: false, mouseKey: 'right', ofset: [13, 13] },//把77放入仓库
 	]
@@ -344,12 +351,12 @@ let heQi = (ts) => {
 			}
 			return { xy: [x, y], key: false, mouseKey: 'left', ofset: [13, 13] }
 		})),
-		{ xy: [271, 422], key: false, mouseKey: 'left', checkBefore: 'select77',cblength:7, type: 'dididi' },//点击合旗按钮
+		{ xy: [271, 422], key: false, mouseKey: 'left', checkBefore: 'select77', cblength: 7, type: 'dididi' },//点击合旗按钮
 	]
 }
 let nnk = 0
 var zzArr = [
-	{ xy: [537, 309], key: false, mouseKey: 'right', check: 'buqi' ,checkBefore: 'djl', type: 'dididi' },
+	{ xy: [537, 309], key: false, mouseKey: 'right', check: 'buqi', checkBefore: 'djl', type: 'dididi' },
 	nnk === 1 ?
 		{ xy: [133, 130], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
 		nnk === 2 ?
@@ -357,19 +364,19 @@ var zzArr = [
 			{ xy: [556, 110], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },//长安
 	//打开仙灵店铺并选择
 	...getCQArr(0),
-	{ xy: [537, 309], key: false, mouseKey: 'right',checkBefore: 'djl' },
+	{ xy: [537, 309], key: false, mouseKey: 'right', checkBefore: 'djl' },
 	nnk === 1 ?
 		{ xy: [511, 126], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
 		nnk === 2 ?
 			{ xy: [274, 172], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-			{ xy: [512, 215], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
+			{ xy: [512, 215], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
 	...getCQArr(1),
-	{ xy: [537, 309], key: false, mouseKey: 'right' ,checkBefore: 'djl'},
+	{ xy: [537, 309], key: false, mouseKey: 'right', checkBefore: 'djl' },
 	nnk === 1 ?
 		{ xy: [184, 221], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://傲来
 		nnk === 2 ?
 			{ xy: [248, 241], mouseKey: 'left', key: ['f3'], checkAfter: 'dian777' } ://长寿
-			{ xy: [591, 379], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777' , checkBefore: 'dian777', type: 'have'},
+			{ xy: [591, 379], keyArr: ['f3'], mouseKey: 'left', checkAfter: 'dian777', checkBefore: 'dian777', type: 'have' },
 	...getCQArr(2),
 	{ xy: [537, 309], key: false, mouseKey: 'right' },
 	nnk === 1 ?
@@ -440,13 +447,15 @@ global.robotFun = () => {
 
 	switch (global.nowObj.check) {
 		default:
-			robotAction({...zzArr[zzIndex], fun:() => {
-				zzIndex++
-				global.giveAs = []
-				if (!zzArr[zzIndex]) zzIndex = 0
-				
-				robotFun()
-			}});
+			robotAction({
+				...zzArr[zzIndex], fun: () => {
+					zzIndex++
+					global.giveAs = []
+					if (!zzArr[zzIndex]) zzIndex = 0
+
+					robotFun()
+				}
+			});
 	}
 
 
@@ -475,10 +484,18 @@ ioHook.on('mousemove', event => {
 
 });
 ioHook.on('mouseclick', event => {
-	
+
 })
 ioHook.on('keydown', event => {
-	
+	console.log(event)
+	if (event.ctrlKey) {
+		switch (event.keycode) {
+			case 16:
+				PS()
+				break;
+			default:
+		}
+	}
 	if (event.ctrlKey && event.keycode == 30) {
 		if (isOpen) {
 			isOpen = false
@@ -490,11 +507,11 @@ ioHook.on('keydown', event => {
 	if (event.keycode == 60) {
 		setInterval(() => {
 			robot.keyTap('f2')
-		}, 200)
+		}, 500)
 		return
 		setInterval(() => {
 			//parseInt(str,16)
-			
+
 			robot.keyTap('tab')
 			func.getPx([global.icons.iszd, global.icons.d4icon, global.icons.zidongzd], (a, b) => {
 				if (a[1] && a[1].x > 408) {
@@ -538,9 +555,10 @@ ioHook.on('keydown', event => {
 
 		//func.getText()
 	}
-	
-});
 
+
+});
+func.getText()
 const id = ioHook.registerShortcut([32, 33], (keys) => {
 	//console.log('Shortcut called with keys:', keys)
 });

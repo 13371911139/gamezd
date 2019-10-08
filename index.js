@@ -30,7 +30,7 @@ const datas = func = {
                 console.log(err)
                 return
             }
-            global.icons[ico] = { pixels: pixels.shape, color: [], obj: pixels }
+            global.icons[ico] = {name:ico, pixels: pixels.shape, color: [], obj: pixels }
             console.log(imgpath, ico)
             for (let i = 0; i < pixels.shape[1]; i++) {
                 for (let j = 0; j < pixels.shape[0]; j++) {
@@ -117,19 +117,35 @@ const datas = func = {
         if (icons.color) {
             icons = [icons]
         }
+        global.windowPixel=global.windowPixel || {x:0,y:0,w:robot.getScreenSize().width,h:robot.getScreenSize().height}
         datas.getScreen(() => {
             getPixels(global.imgPath, function (err, pixels) {
                 if (err) return
                 // global.icons[icons] = { pixels: pixels.shape, color: [] }
-                var findIs = false, pxArr = [], iconLength = []
+                var findIs = false, pxArr = [], iconLength = [],jsons={}
                 for (let i = global.windowPixel.y; i < global.windowPixel.y + global.windowPixel.h; i++) {
                     for (let j = global.windowPixel.x; j < global.windowPixel.x + global.windowPixel.w; j++) {
                         let thisColor = (pixels.get(j, i, 0) + ',' + pixels.get(j, i, 1) + ',' + pixels.get(j, i, 2) + ',' + pixels.get(j, i, 3))
                         //console.log(i,j,'color',thisColor,'jjj',icons.color[0])
                         //console.log(icons)
                         for (let mts = 0; mts < icons.length; mts++) {
+                            
                             let item = icons[mts]
-                            if (item.color[0] == thisColor) {
+                            var scopeIsTrue=false
+                            if(item.checkType=='scope'){
+                               var iconsClor= item.color[0].split(',')
+                               var thisClor=thisColor.split(',')
+                               if(
+                                   Math().abs(iconsClor[0]-thisClor[0]<20)&&
+                                   Math().abs(iconsClor[1]-thisClor[1]<20)&&
+                                   Math().abs(iconsClor[2]-thisClor[2]<20)
+                               ){
+                                scopeIsTrue=true
+                               }
+                            }
+                           
+                            if (item.color[0] == thisColor||scopeIsTrue) {
+                               
                                 let sumNum = 0
                                 for (let m = 0; m < item.pixels[1]; m++) {
                                     for (let s = 0; s < item.pixels[0]; s++) {
@@ -138,12 +154,22 @@ const datas = func = {
                                         if (mcolor == scolor) {
                                             sumNum++
                                         }
+                                        if(scopeIsTrue && 
+                                            Math().abs(mcolor[0]-scolor[0]<10)&&
+                                             Math().abs(mcolor[1]-scolor[1]<10)&&
+                                            Math().abs(mcolor[2]-scolor[2]<10)
+                                            ){
+                                                sumNum++
+                                        }
+                                        
                                     }
                                 }
+                                //console.log({ x: j - global.windowPixel.x, y: i - global.windowPixel.y })
                                 if (sumNum / item.color.length > 0.8) {
-                                    pxArr[mts] = { x: j - global.windowPixel.x, y: i - global.windowPixel.y }
-
+                                    pxArr[mts] = {name:item.name, x: j - global.windowPixel.x, y: i - global.windowPixel.y }
+                                    jsons[item.name]=pxArr[mts]
                                 } else {
+                                    jsons[item.name]=jsons[item.name] || false
                                     pxArr[mts] = pxArr[mts] || false
                                 }
                                 if (sumNum / item.color.length > 0.8) {
@@ -157,19 +183,19 @@ const datas = func = {
                         }
                     }
                 }
-                fun && fun(pxArr, iconLength)
+                fun && fun(pxArr, iconLength,jsons)
 
             })
         })
     },
     getText: () => {
-        let picData = datas.getCapture(global.windowPixel.x, global.windowPixel.y, global.windowPixel.w, global.windowPixel.h)
+        //let picData = datas.getCapture(global.windowPixel.x, global.windowPixel.y, global.windowPixel.w, global.windowPixel.h)
         // console.log(picData,9999999999999999999999999999999999999)
-        var image = fs.readFileSync("./shot.png");
-        fs.writeFileSync('./cat.text', picData.image);
+        var image = fs.readFileSync("./img/tupian.png");
+        //fs.writeFileSync('./cat.text', picData.image);
 
         //console.log(imgData)
-        client.generalBasic(picData.image).then(function (result) {
+        client.generalBasic(image.toString('base64')).then(function (result) {
             console.log(JSON.stringify(result));
         }).catch(function (err) {
             // 如果发生网络错误

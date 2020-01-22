@@ -2,6 +2,7 @@ const getPixels = require('get-pixels')
 const screenshot = require('screenshot-desktop')
 const robot = require('robotjs')
 const oldIndex = require('../index')
+const domt = require('../shimen/dosomeThing')
 var fs = require('fs')
 let getWindow = async px => {
   return new Promise((resole, reject) => {
@@ -141,35 +142,48 @@ let datas = {
       })
     })
   },
+  getColor: (pic, x, y) => {
+    return `${pic.get(x, y, 0)}${pic.get(x, y, 1)}${pic.get(x, y, 2)}${pic.get(
+      x,
+      y,
+      3
+    )}`
+  },
   isStop: async () => {
     global.icons.isStop =
       global.icons.isStop ||
-      (await func.getIcon('D:/project/ganemh/img/isStop.png', 'isStop'))
+      (await func.getIcon('D:/project/ganemh/img/alltitle.png', 'isStop'))
     let stopPx = await datas.getIconPx(global.icons.isStop)
-    stopPx = stopPx.jsons.isStop
+    let pxs = stopPx.jsons.isStop
+
+    pxs.oldc = global.oldc
     await datas.getCutImg()
     return new Promise((resole, reject) => {
       getPixels(global.imgPath, function(err, pixels) {
         if (err) return
-        let isStops = []
-        for (let i = stopPx.x; i < stopPx.x + 15; i++) {
-          for (let j = stopPx.y; j < stopPx.y + 80; j++) {
-            isStops.push(pixels.get(i, j, 0))
-          }
-        }
-        global.isStop = global.isStop || []
-        let isnotok = 0
-        isStops.forEach((item, index) => {
-          if (item != global.isStop[index]) {
-            isnotok++
-          }
-        })
-        if (isnotok > 5) {
-          global.isStop = isStops
+        let newc =
+          parseInt(datas.getColor(pixels, pxs.x + 5, pxs.y - 20)) +
+          parseInt(datas.getColor(pixels, pxs.x + 5, pxs.y - 25)) +
+          parseInt(datas.getColor(pixels, pxs.x + 10, pxs.y - 20)) +
+          parseInt(datas.getColor(pixels, pxs.x + 10, pxs.y - 25)) +
+          parseInt(datas.getColor(pixels, pxs.x + 20, pxs.y - 20)) +
+          parseInt(datas.getColor(pixels, pxs.x + 20, pxs.y - 25))
+
+        if (pxs.oldc !== newc) {
+          console.log(pxs.oldc, newc)
+          global.isStop = false
+          global.oldc = pxs.oldc = newc
+
           resole(false)
-          return false
         } else {
-          resole(true)
+          console.log('似乎停了')
+          if (!global.isStop) {
+            global.isStop = true
+            resole(false)
+          } else {
+            global.isStop = false
+            resole(true)
+          }
         }
       })
     })

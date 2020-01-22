@@ -9,13 +9,15 @@ const screenshot = require('screenshot-desktop')
 global.icons = {}
 
 let myfun = async function() {
-  await events.sleep(2000)
-  let allIcons = await allIcon()
+  await events.sleep(15000)
+  global.allIcons = await allIcon()
   console.log(allIcon.fcs)
 
   await baseFun.getWindow()
   let iconsm = await baseFun.getIconPx(allIcons.fcs)
   let mosPx = await baseFun.getMose()
+  let shimenArr = ['toputi', 'ptrw']
+  await events.doSomeThing(shimenArr)
   await events.mouseMove([iconsm.jsons.fcsmMap.x, iconsm.jsons.fcsmMap.y])
   events.click()
   await events.moveStop()

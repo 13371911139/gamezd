@@ -1,35 +1,29 @@
-const robot = require("robotjs")
-const getPixels = require("get-pixels")
-const screenshot = require('screenshot-desktop')
 const checks = require('../check/index')
-var fs = require('fs');
-var AipOcrClient = require("baidu-aip-sdk").ocr;
-var APP_ID = "16059958";
-var API_KEY = "j7ECvujFdkjVVOZvgddu6kR0";
-var SECRET_KEY = "hEpClWTOApsB8bGwnTZaQnMhwQwNYOOf";
-var client = new AipOcrClient(APP_ID, API_KEY, SECRET_KEY);
-var HttpClient = require("baidu-aip-sdk").HttpClient;
-HttpClient.setRequestOptions({ timeout: 5000 });
+const func = require('../index.js')
+const allIcon = require('../base/map/allMapIcons')
+const baseFun = require('../base/func.js')
+const events = require('../base/events')
+const robot = require('robotjs')
+const getPixels = require('get-pixels')
+const screenshot = require('screenshot-desktop')
 
-let PS={
-    whatToDo:()=>{
-        return new Promise((resolve, reject) => {
-            checks.djl({fun:function(){
-                resolve(true)
-            }})
-        })
-        
-    },
-    where:()=>{
+const domt = require('./dosontArr')
+global.icons = {}
 
-    },
-    toGangs:()=>{
-        robot.keyTap('tap')
-    }
+let myfun = async function() {
+  await events.sleep(2000)
+  global.allIcons = await allIcon()
+  console.log(allIcon.fcs)
+  await events.moveStop()
+  await baseFun.getWindow()
+  let iconsm = await baseFun.getIconPx(allIcons.fcs)
+  let mosPx = await baseFun.getMose()
+  let shimenArr = ['toBP', 'ptrw']
+  await events.doSomeThing(shimenArr, domt)
+  await events.mouseMove([iconsm.jsons.fcsmMap.x, iconsm.jsons.fcsmMap.y])
+  events.click()
+  await events.moveStop()
+  console.log('stop')
+  events.click('right')
 }
-
-module.exports = ()=>{
-    PS.whatToDo().then((io)=>{
-        console.log(io)
-    })
-}
+myfun()

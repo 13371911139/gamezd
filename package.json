@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "np": "node ./app.js",
-    "dnf": "set NODE_SE=dnf && node  ./DNF"
+    "dnf": "set NODE_SE=dnf && node  ./DNF",
+    "ps": "node ./paoshang"
   },
   "author": "",
   "license": "ISC",

@@ -9,10 +9,11 @@ robot.setKeyboardDelay(200)
 const ioHook = require('iohook');
 const net = require('net');
 let robotkeys = {
-  1: 'esc', 59: "f1", 60: "f2", 61: "f3", 62: "f4", 63: "f5", 64: "f6",
+  1: 'escape', 59: "f1", 60: "f2", 61: "f3", 62: "f4", 63: "f5", 64: "f6",
   16: 'q', 17: 'w', 18: 'e', 19: 'r', 20: 't', 21: 'y', 22: 'u', 23: 'i',
   30: 'a', 31: 's', 32: 'd', 33: 'f', 34: 'g', 35: 'h', 36: 'j', 37: 'k',
   44: 'z', 45: 'x', 46: 'c', 47: 'v', 48: 'b', 49: 'n', 50: 'm', 57: 'space',
+  61000: 'up', 61003: 'left', 61008: 'down', 61005: 'right'
 }
 const server = new net.createServer();
 let clientName = 0

@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "np": "node ./app.js",
     "dnf": "set NODE_SE=dnf && node  ./DNF",
-    "ps": "node ./paoshang"
+    "ps": "node ./paoshang",
+    "dnfserver": "node ./DNFtb"
   },
   "author": "",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "gm": "^1.23.1",
     "iohook": "^0.4.4",
     "keypress": "^0.2.1",
+    "net": "^1.0.2",
     "prebuild-install": "^5.2.4",
     "robotjs": "^0.6.0",
     "screenshot-desktop": "^1.7.0"

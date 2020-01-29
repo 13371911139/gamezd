@@ -7,7 +7,8 @@
     "np": "node ./app.js",
     "dnf": "set NODE_SE=dnf && node  ./DNF",
     "ps": "node ./paoshang",
-    "dnfserver": "node ./DNFtb"
+    "dnfserver": "set NODE_SE=iisServer &&  node ./DNFtb",
+    "dnfcl": "set NODE_SE=dnfcl &&  node ./DNFtb"
   },
   "author": "",
   "license": "ISC",

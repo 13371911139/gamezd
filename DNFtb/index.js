@@ -24,14 +24,7 @@ server.on('connection', (client) => {
   client.on('data', function (msg) { //接收client发来的信息
     let keystring = msg.toString()
     console.log(keystring)
-    try {
-      for (let i in clients) {
-        clients[i].write(keystring)
-      }
 
-    } catch (e) {
-      console.log('这个按键错误')
-    }
   });
   client.on('error', function (e) { //监听客户端异常
     console.log('client error' + e);
@@ -52,11 +45,13 @@ socket.connect(port, hostname, function () {
   socket.write('hello 大家好~~');
 });
 socket.on('data', function (msg) {
+  if (process.env.NODE_SE != 'dnfserver') {
+    return false;
+  }
   console.log(msg.toString());
   let keystring = msg.toString().split(',')
   try {
     robot.keyToggle(robotkeys[keystring[0]], keystring[1] == 'keydown' ? 'down' : 'up')
-
   } catch (e) { }
 
 });
@@ -67,15 +62,27 @@ socket.on('close', function () {
   console.log('服务器端下线了');
 });
 keyup = false;
+
+let = dosoting = r => {
+  try {
+    for (let i in clients) {
+
+      clients[i].write(r)
+    }
+  } catch (e) {
+    console.log('这个按键错误')
+  }
+}
 ioHook.on('keydown', event => {
   if (keyup) return false
   keyup = true;
-  socket.write(event.keycode.toString() + ',' + event.type);
+
+  dosoting(event.keycode.toString() + ',' + event.type);
 })
 ioHook.on('keyup', event => {
   if (!keyup) return false;
   keyup = false
-  socket.write(event.keycode.toString() + ',' + event.type);
+  dosoting(event.keycode.toString() + ',' + event.type);
 })
 ioHook.start()
 server.listen(8888)

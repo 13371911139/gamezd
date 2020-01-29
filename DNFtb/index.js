@@ -83,13 +83,13 @@ let = dosoting = r => {
   }
 }
 ioHook.on('keydown', event => {
-  if (keyup) return false
+  if (keyup || process.env.NODE_SE != 'dnfserver') return false
   keyup = true;
   console.log(event.keycode.toString() + ',' + event.type)
   dosoting(event.keycode.toString() + ',' + event.type);
 })
 ioHook.on('keyup', event => {
-  if (!keyup) return false;
+  if (!keyup || process.env.NODE_SE != 'dnfserver') return false;
   keyup = false
   dosoting(event.keycode.toString() + ',' + event.type);
 })

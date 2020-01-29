@@ -46,7 +46,7 @@ socket.connect(port, hostname, function () {
 });
 let keys
 socket.on('data', function (msg) {
-  if (process.env.NODE_SE != 'dnfserver') {
+  if (process.env.NODE_Sn) {
     return false;
   }
   console.log(msg.toString());
@@ -83,13 +83,12 @@ let = dosoting = r => {
   }
 }
 ioHook.on('keydown', event => {
-  if (keyup || process.env.NODE_SE != 'dnfserver') return false
+  if (keyup || !process.env.NODE_Sn) return false
   keyup = true;
-  console.log(event.keycode.toString() + ',' + event.type)
   dosoting(event.keycode.toString() + ',' + event.type);
 })
 ioHook.on('keyup', event => {
-  if (!keyup || process.env.NODE_SE != 'dnfserver') return false;
+  if (!keyup || !process.env.NODE_Sn) return false;
   keyup = false
   dosoting(event.keycode.toString() + ',' + event.type);
 })

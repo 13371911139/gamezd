@@ -7,7 +7,7 @@
     "np": "node ./app.js",
     "dnf": "set NODE_SE=dnf && node  ./DNF",
     "ps": "node ./paoshang",
-    "dnfserver": "set NODE_SE=iisServer &&  node ./DNFtb",
+    "dnfserver": "set NODE_Sn='dnfserver' &&  node ./DNFtb",
     "dnfcl": "set NODE_SE=dnfcl &&  node ./DNFtb"
   },
   "author": "",

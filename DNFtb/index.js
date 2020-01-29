@@ -21,10 +21,13 @@ server.on('connection', (client) => {
   client.name = ++clientName; // 给每一个client起个名
   clients[client.name] = client; // 将client保存在clients
   client.on('data', function (msg) { //接收client发来的信息
-    let keystring = msg.toString().split(',')
+    let keystring = msg.toString()
     console.log(keystring)
     try {
-      robot.keyToggle(robotkeys[keystring[0]], keystring[1] == 'keydown' ? 'down' : 'up')
+      for (let i in clients) {
+        clients[i].write(keystring)
+      }
+
     } catch (e) {
       console.log('这个按键错误')
     }
@@ -45,11 +48,16 @@ const port = 8888;
 const hostname = '192.168.1.6';
 socket.setEncoding = 'UTF-8';
 socket.connect(port, hostname, function () {
-
   socket.write('hello 大家好~~');
 });
 socket.on('data', function (msg) {
   console.log(msg.toString());
+  let keystring = msg.toString().split(',')
+  try {
+    robot.keyToggle(robotkeys[keystring[0]], keystring[1] == 'keydown' ? 'down' : 'up')
+
+  } catch (e) { }
+
 });
 socket.on('error', function (error) {
   console.log('error' + error);

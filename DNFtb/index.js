@@ -44,14 +44,23 @@ socket.setEncoding = 'UTF-8';
 socket.connect(port, hostname, function () {
   socket.write('hello 大家好~~');
 });
+let keys
 socket.on('data', function (msg) {
   if (process.env.NODE_SE != 'dnfserver') {
     return false;
   }
   console.log(msg.toString());
   let keystring = msg.toString().split(',')
+  if (keys) {
+    try {
+      robot.keyToggle(keys, 'up')
+    } catch (e) { }
+
+  }
   try {
+
     robot.keyToggle(robotkeys[keystring[0]], keystring[1] == 'keydown' ? 'down' : 'up')
+    keys = robotkeys[keystring[0]]
   } catch (e) { }
 
 });
@@ -76,7 +85,7 @@ let = dosoting = r => {
 ioHook.on('keydown', event => {
   if (keyup) return false
   keyup = true;
-
+  console.log(event.keycode.toString() + ',' + event.type)
   dosoting(event.keycode.toString() + ',' + event.type);
 })
 ioHook.on('keyup', event => {

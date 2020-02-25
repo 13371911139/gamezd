@@ -12,7 +12,7 @@ let getWindow = async px => {
   })
 }
 let datas = {
-  getImg() {
+  getImg () {
     return screenshot({ filename: 'shot.png' })
       .then(imgPath => {
         global.imgPath = imgPath
@@ -22,29 +22,29 @@ let datas = {
         datas.getImg
       })
   },
-  async getZZ(path) {
+  async getZZ (path) {
     return new Promise(async (resole, reject) => {
       let zz = []
-      getPixels(path, function(err, pixels) {
+      getPixels(path, function (err, pixels) {
         if (err) return
         for (let i = 0; i < 21; i++) {
           zz.push(
             pixels.get(i, i, 0) +
-              ',' +
-              pixels.get(i, i, 1) +
-              ',' +
-              pixels.get(i, i, 2) +
-              ',' +
-              pixels.get(i, i, 3)
+            ',' +
+            pixels.get(i, i, 1) +
+            ',' +
+            pixels.get(i, i, 2) +
+            ',' +
+            pixels.get(i, i, 3)
           )
           zz.push(
             pixels.get(i + 1, i + 1, 0) +
-              ',' +
-              pixels.get(i + 1, i + 1, 1) +
-              ',' +
-              pixels.get(i + 1, i + 1, 2) +
-              ',' +
-              pixels.get(i + 1, i + 1, 3)
+            ',' +
+            pixels.get(i + 1, i + 1, 1) +
+            ',' +
+            pixels.get(i + 1, i + 1, 2) +
+            ',' +
+            pixels.get(i + 1, i + 1, 3)
           )
         }
         resole(zz)
@@ -62,14 +62,14 @@ let datas = {
       })
     })
   },
-  async getMose() {
-    let zzArr = [await datas.getZZ('D:/project/ganemh/img/zhizhen.png')]
+  async getMose () {
+    let zzArr = [await datas.getZZ(appDir + '/img/zhizhen.png')]
     global.windowPixel = await datas.getWindow()
     return new Promise((resole, reject) => {
       global.windowPixel = global.windowPixel
       let arrJt = []
 
-      getPixels(imgPath, function(err, pixels) {
+      getPixels(imgPath, function (err, pixels) {
         if (err) {
           getZZPx = (zz, imgPath)
           return
@@ -152,14 +152,14 @@ let datas = {
   isStop: async () => {
     global.icons.isStop =
       global.icons.isStop ||
-      (await func.getIcon('D:/project/ganemh/img/alltitle.png', 'isStop'))
+      (await func.getIcon(appDir + '/img/alltitle.png', 'isStop'))
     let stopPx = await datas.getIconPx(global.icons.isStop)
     let pxs = stopPx.jsons.isStop
 
     pxs.oldc = global.oldc
     await datas.getCutImg()
     return new Promise((resole, reject) => {
-      getPixels(global.imgPath, function(err, pixels) {
+      getPixels(global.imgPath, function (err, pixels) {
         if (err) return
         let newc =
           parseInt(datas.getColor(pixels, pxs.x + 5, pxs.y - 20)) +

@@ -5,9 +5,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "np": "node ./app.js",
-    "dnf": "set NODE_SE=dnf && node  ./DNF",
+    "dnf": "set NODE_SE=dnf &&set NODE_type=dnf&& node  ./DNF",
     "ps": "node ./paoshang",
-    "dnfserver": "set NODE_Sn='dnfserver' &&  node ./DNFtb",
+    "dnfserver": "set NODE_Sn='dnfserver'&&set NODE_type=dnf  &&  node ./DNFtb",
     "dnfcl": "set NODE_SE=dnfcl &&  node ./DNFtb"
   },
   "author": "",

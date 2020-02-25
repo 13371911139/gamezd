@@ -19,9 +19,14 @@ let events = {
   mouseMove: async where => {
     //return new Promise()
     let sd = 50
-    let mose = await baseFun.getMose()
-    console.log(mose)
+
     let nowpy = robot.getMousePos()
+    let mose = [nowpy.x, nowpy.y]
+    if (process.env.NODE_type == 'mh') {
+      await baseFun.getMose()
+    }
+    console.log(mose)
+
     if (!mose[0]) {
       return false
       await sleep(500)
@@ -65,6 +70,17 @@ let events = {
       return robot.keyTap(key, key2)
     }
   },
+  keydbtap: async (key, time) => {
+    robot.keyTap(key)
+    await events.sleep(300)
+    robot.keyToggle(key, 'down')
+    return new Promise((r, j) => {
+      setTimeout(n => {
+        robot.keyToggle(key, 'up')
+        r()
+      })
+    })
+  },
   // 判断是否正在移动
   moveStop: async () => {
     if (await baseFun.isStop()) {
@@ -81,7 +97,7 @@ let events = {
     let iconsm
     try {
       data = domt[arr[index]][dindex]
-    } catch (error) {}
+    } catch (error) { }
     debugger
     if (data) {
       if (data.key) {
@@ -95,9 +111,9 @@ let events = {
 
         await events.mouseMove([
           iconsm.jsons[data.check].x +
-            (data.checkmosec ? data.checkmosec[0] : 0),
+          (data.checkmosec ? data.checkmosec[0] : 0),
           iconsm.jsons[data.check].y +
-            (data.checkmosec ? data.checkmosec[1] : 0)
+          (data.checkmosec ? data.checkmosec[1] : 0)
         ])
       }
       if (data.checkmose && data.check) {

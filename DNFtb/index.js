@@ -4,9 +4,11 @@ const getPixels = require("get-pixels")
 const screenshot = require('screenshot-desktop')
 var gm = require('gm');
 var twoPI = Math.PI * 2.0;
-robot.setMouseDelay(200);
-robot.setKeyboardDelay(200)
+robot.setMouseDelay(5);
+robot.setKeyboardDelay(5)
 const ioHook = require('iohook');
+
+
 const net = require('net');
 let robotkeys = {
   1: 'escape', 59: "f1", 60: "f2", 61: "f3", 62: "f4", 63: "f5", 64: "f6",
@@ -49,7 +51,7 @@ socket.on('data', function (msg) {
   if (process.env.NODE_Sn) {
     return false;
   }
-  console.log(msg.toString());
+  console.log(msg.toString() + ';;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;');
   let keystring = msg.toString().split(',')
   if (keys) {
     try {

@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'mapAll',
       key: 'tab',
-      checkmose: [0, -20],
+      checkmose: [0, -40],
       check: 'mapAll',
       checkClick: true,
       stop: true
@@ -12,7 +12,7 @@ module.exports = {
       name: '长安进入国境',
       check: 'alltitle',
       key: 'tab',
-      checkmose: [-600, -30],
+      checkmose: [-600, -50],
       checkClick: true,
       afterAwait: 5000
     },

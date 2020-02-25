@@ -1,3 +1,6 @@
+var path = require('path');
+global.appDir = path.join(__dirname, '../')
+
 const checks = require('../check/index')
 const func = require('../index.js')
 const allIcon = require('../base/map/allMapIcons')

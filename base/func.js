@@ -155,7 +155,7 @@ let datas = {
       global.icons.isStop ||
       (await func.getIcon(appDir + '/img/alltitle.png', 'isStop'))
     let stopPx = await datas.getIconPx(global.icons.isStop)
-    let pxs = stopPx.jsons.isStop
+    let pxs = stopPx.jsons.isStop||{}
 
     pxs.oldc = global.oldc
     await datas.getCutImg()

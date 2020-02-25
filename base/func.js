@@ -150,6 +150,7 @@ let datas = {
     )}`
   },
   isStop: async () => {
+    global.oldc=global.oldc || ''
     global.icons.isStop =
       global.icons.isStop ||
       (await func.getIcon(appDir + '/img/alltitle.png', 'isStop'))

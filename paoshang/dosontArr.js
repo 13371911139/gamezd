@@ -3,7 +3,7 @@ module.exports = {
     {
       name: 'mapAll',
       key: 'tab',
-      checkmose: [0, -40],
+      checkmose: [0, -30],
       check: 'mapAll',
       checkClick: true,
       stop: true

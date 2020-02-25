@@ -1,10 +1,10 @@
 module.exports = {
   toBP: [
     {
-      name: 'mapAll',
+      name: '前往国境路口',
       key: 'tab',
       checkmose: [0, -30],
-      check: 'mapAll',
+      check: 'shijie',
       checkClick: true,
       stop: true
     },

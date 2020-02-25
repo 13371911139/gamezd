@@ -3,7 +3,7 @@ module.exports = {
     {
       name: '前往国境路口',
       key: 'tab',
-      checkmose: [0, -30],
+      checkmose: [-405, -18],
       check: 'shijie',
       checkClick: true,
       stop: true

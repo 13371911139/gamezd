@@ -117,7 +117,7 @@ let datas = {
                   }
                 }
                 if (num > nums) {
-                  //console.log([i, j], num)
+               
                   nums = num
                   nowPy = [i, j]
                 }
@@ -132,7 +132,7 @@ let datas = {
   },
   getIconPx: icons => {
     return new Promise((resole, reject) => {
-      //  console.log(icons)
+     
       oldIndex.getPx(icons, (pxArr, iconLength, jsons) => {
         resole({
           pxArr,
@@ -171,7 +171,7 @@ let datas = {
           parseInt(datas.getColor(pixels, pxs.x + 20, pxs.y - 25))
 
         if (pxs.oldc !== newc) {
-          console.log(pxs.oldc, newc)
+          console.log('验证是否停止',newc)
           global.isStop = false
           global.oldc = pxs.oldc = newc
 

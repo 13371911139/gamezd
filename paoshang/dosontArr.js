@@ -152,3 +152,28 @@ module.exports = {
     }
   ]
 }
+let data={
+  projectId:'xxx',
+  problemList:[
+    {
+      describe:'xxx',
+      classification:'分类',
+      type:'状态',
+      riskType:'G',
+      fileBusinessID:'xxxxx',
+      ProgressId:'问题进展id'
+    }
+  ]
+}
+// 返回一个问题进展的id用作关联问题列表
+let Progress={
+  projectId:'xxx',
+  ProgressList:[
+    {
+      message:'问题进展',
+      startTime:'生成时间',
+      userId:'操作人id',
+      userName:'操作人名称'
+    }
+  ]
+}

@@ -25,7 +25,7 @@ let events = {
     if (process.env.NODE_type == 'mh') {
       await baseFun.getMose()
     }
-    console.log(mose)
+   
 
     if (!mose[0]) {
       return false
@@ -41,7 +41,6 @@ let events = {
     let mosechax = (nowpy.x - mose[0]) / sd
     let pyyc = (where[1] - nowpy.y) / sd
     let mosechay = (nowpy.y - mose[1]) / sd
-    console.log(mose, where, nowpy, mosechay, mosechax)
     if (!mose.length) {
       await sleep(100)
       return events.mouseMove(where)
@@ -105,9 +104,8 @@ let events = {
       }
       if (data.check) {
         await events.sleep(500)
-        console.log(allIcons.fcs[data.check])
         iconsm = await baseFun.getIconPx(allIcons.fcs[data.check])
-        console.log(iconsm)
+        
 
         await events.mouseMove([
           iconsm.jsons[data.check].x +

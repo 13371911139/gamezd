@@ -16,7 +16,7 @@ global.icons = {}
 let myfun = async function() {
   await events.sleep(2000)
   global.allIcons = await allIcon()
-  console.log(allIcon.fcs)
+  console.log(allIcon.fcs,'fsdf')
   await events.moveStop()
   await baseFun.getWindow()
   let iconsm = await baseFun.getIconPx(allIcons.fcs)

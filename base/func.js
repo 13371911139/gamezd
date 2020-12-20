@@ -118,7 +118,7 @@ let datas = {
                   }
                 }
                 if (num > nums) {
-                  //console.log([i, j], num)
+
                   nums = num
                   nowPy = [i, j]
                 }

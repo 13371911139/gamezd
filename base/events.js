@@ -41,7 +41,6 @@ let events = {
     let mosechax = (nowpy.x - mose[0]) / sd
     let pyyc = (where[1] - nowpy.y) / sd
     let mosechay = (nowpy.y - mose[1]) / sd
-    console.log(mose, where, nowpy, mosechay, mosechax)
     if (!mose.length) {
       await sleep(100)
       return events.mouseMove(where)

@@ -16,7 +16,11 @@ server.on('connection', (client) => {
   client.on('data', function (msg) { //接收client发来的信息
     let keystring = msg.toString()
     console.log(keystring)
-
+    if (keystring == 'shuguangguang') {
+      for (let i in clients) {
+        clients[i].write('shuguangguang')
+      }
+    }
   });
   client.on('error', function (e) { //监听客户端异常
     console.log('client error' + e);
@@ -31,7 +35,7 @@ server.on('connection', (client) => {
 
 const socket = new net.Socket();
 const port = 8888;
-const hostname = '192.168.116.2';
+const hostname = '192.168.116.129';
 socket.setEncoding = 'UTF-8';
 socket.connect(port, hostname, function () {
   socket.write('hello 大家好~~');
@@ -122,9 +126,7 @@ let myfun = async function () {
         data.push(newData)
       }
       if (newData.snum / 20 > 6) {
-        for (let i in clients) {
-          clients[i].write('shuguangguang')
-        }
+        socket.write('shuguangguang')
         return
       }
       // 设置位置 点击次数

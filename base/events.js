@@ -16,25 +16,25 @@ let events = {
     sleep(400)
     robot.mouseToggle('up', type)
   },
-  mouseMove: async where => {
+  mouseMove: async (where, ischeckmose) => {
     //return new Promise()
     let sd = 50
 
     let nowpy = robot.getMousePos()
     let mose = [nowpy.x, nowpy.y]
+    mose = await baseFun.getMose()
     if (process.env.NODE_type == 'mh') {
-      await baseFun.getMose()
+      // mose = await baseFun.getMose()
     }
-    console.log(mose)
-
     if (!mose[0]) {
-      return false
-      await sleep(500)
+      robot.moveMouse(where[0], where[1])
       return events.mouseMove(where)
       robot.moveMouse(nowpy.x + 50, nowpy.y + 50)
       mose = await baseFun.getMose()
     }
-    if (Math.abs(where[0] - mose[0]) < 5 && Math.abs(where[1] - mose[1]) < 5) {
+    console.log('坐标差：x:' + (where[0] - mose[0]) + 'y:' + (where[1] - mose[1]))
+    if (Math.abs(where[0] - mose[0]) < 5 &&
+      Math.abs(where[1] - mose[1]) < 5) {
       return false
     }
     let pyxc = (where[0] - nowpy.x) / sd
@@ -52,7 +52,8 @@ let events = {
         nowpy.y + pyyc * i + mosechay * i
       )
     }
-    return events.mouseMove(where)
+
+    return ischeckmose != 'checkmose' && events.mouseMove(where)
   },
   keytap: async (key, key2) => {
     await events.sleep(200)
@@ -98,16 +99,23 @@ let events = {
     try {
       data = domt[arr[index]][dindex]
     } catch (error) { }
-    debugger
+
     if (data) {
+      if (data.beforeAwait) {
+        await events.sleep(data.beforeAwait)
+      }
+
       if (data.key) {
         await events.keytap(data.key)
       }
-      if (data.check) {
+      data.mosebytab && await events.keytap('tab')
+      if (data.check || data.checkt) {
         await events.sleep(500)
-        console.log(allIcons.fcs[data.check])
-        iconsm = await baseFun.getIconPx(allIcons.fcs[data.check])
-        console.log(iconsm)
+        console.log(data)
+        console.log(allIcons.fcs[data.checkt])
+        iconsm = await baseFun.getIconPx(allIcons.fcs[data.check || data.checkt], data.checkt)
+        console.log(data.name)
+
 
         await events.mouseMove([
           iconsm.jsons[data.check].x +
@@ -115,13 +123,20 @@ let events = {
           iconsm.jsons[data.check].y +
           (data.checkmosec ? data.checkmosec[1] : 0)
         ])
+
       }
       if (data.checkmose && data.check) {
+
         await events.mouseMove([
           iconsm.jsons[data.check].x + data.checkmose[0],
           iconsm.jsons[data.check].y + data.checkmose[1]
-        ])
+        ], 'checkmose')
+
       }
+      if (data.mose) {
+        await events.mouseMove(data.mose)
+      }
+      data.mosebytab && await events.keytap('tab')
       if (data.checkClick) {
         await events.click()
       }
@@ -129,7 +144,7 @@ let events = {
         await events.click('right')
       }
       if (data.stop) {
-        await events.sleep(3000)
+
         await events.moveStop()
       }
     } else {

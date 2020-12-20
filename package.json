@@ -6,9 +6,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "np": "node ./app.js",
     "dnf": "set NODE_SE=dnf &&set NODE_type=dnf&& node  ./DNF",
-    "ps": "node ./paoshang",
+    "ps": "set NODE_type=mh  &&node ./paoshang",
     "dnfserver": "set NODE_Sn='dnfserver'&&set NODE_type=dnf  &&  node ./DNFtb",
-    "dnfcl": "set NODE_SE=dnfcl &&  node ./DNFtb"
+    "dnfcl": "set NODE_SE=dnfcl &&  node ./DNFtb",
+    "db": "node ./dubo"
   },
   "author": "",
   "license": "ISC",

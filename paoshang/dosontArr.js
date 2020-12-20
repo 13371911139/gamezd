@@ -1,5 +1,68 @@
+/***
+ * shijie  打开地图世界那俩字
+ */
 module.exports = {
+  getrw: [
+
+    {
+      name: '前往帮派',
+      key: 'tab',
+      check: 'shijie',
+      checkmosec: [-40, -270],
+      checkClick: true,
+      stop: true,
+    },
+    {
+      name: '帮派门口',
+      key: ['tab', 'f9'],
+      check: 'bangpaimenk',
+      checkmose: [95, 26],
+      checkClick: true,
+    },
+    {
+      name: '进入帮派',
+      check: 'bangpaizhuguan',
+      checkmose: [-0, 68],
+      checkClick: true,
+    },
+    {
+      name: '电机帮派师爷',
+      check: 'bangpaineishiye',
+      beforeAwait: 2000,
+      checkmose: [-25, 30],
+      checkClick: true,
+    },
+    {
+      name: '进入金库',
+      check: 'jinrujinku',
+      checkmosec: [15, 70],
+      checkClick: true,
+    },
+    {
+      name: '点帮派纵观',
+      beforeAwait: 2000,
+      check: 'jinkuzongguan',
+      checkmose: [10, 80],
+      checkClick: true,
+    },
+    {
+      name: '领取跑商任务',
+      check: 'lingqurenwu',
+      checkmosec: [-8, 88],
+      checkClick: true,
+    },
+  ],
   toBP: [
+    {
+      name: '长安货商',
+      key: 'tab',
+      check: 'cahuoshang',
+      checkClick: true,
+      stop: true,
+    },
+
+
+
     {
       name: '前往国境路口',
       key: 'tab',

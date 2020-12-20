@@ -21,9 +21,9 @@ HttpClient.setRequestOptions({ timeout: 5000 })
 
 const datas = (func = {
   //获取图信息
-  getIcon: (imgpath, ico) => {
+  getIcon: (imgpath, ico, textcolor) => {
     return new Promise((r, j) => {
-      getPixels(imgpath, function(err, pixels) {
+      getPixels(imgpath, function (err, pixels) {
         if (err) {
           console.log(err)
           return
@@ -35,17 +35,28 @@ const datas = (func = {
           obj: pixels
         }
 
+        let startPosition = []
         for (let i = 0; i < pixels.shape[1]; i++) {
           for (let j = 0; j < pixels.shape[0]; j++) {
-            global.icons[ico].color.push(
-              pixels.get(j, i, 0) +
-                ',' +
-                pixels.get(j, i, 1) +
-                ',' +
-                pixels.get(j, i, 2) +
-                ',' +
-                pixels.get(j, i, 3)
-            )
+            let psColor = pixels.get(j, i, 0) +
+              ',' +
+              pixels.get(j, i, 1) +
+              ',' +
+              pixels.get(j, i, 2) +
+              ',' +
+              pixels.get(j, i, 3)
+            global.icons[ico].color.push(psColor)
+            if (textcolor && psColor == textcolor) {
+              if (!global.icons[ico].colorPosition) {
+                startPosition = [j, i]
+                global.icons[ico].colorPosition = []
+              }
+              global.icons[ico].colorPosition.push({
+                position: [j - startPosition[0], i - startPosition[1]],
+                color: psColor
+              })
+            }
+
           }
         }
         r(global.icons[ico])
@@ -68,7 +79,7 @@ const datas = (func = {
   },
   getWindow: fun => {
     datas.getScreen(() => {
-      getPixels(global.imgPath, function(err, pixels) {
+      getPixels(global.imgPath, function (err, pixels) {
         if (err) return
         global.icons[icons] = { pixels: pixels.shape, color: [] }
         console.log('开始循环')
@@ -85,15 +96,15 @@ const datas = (func = {
 
             let windowColor = 122 + ',' + 158 + ',' + 194 + ',' + 255
             if (thisColor == windowColor) {
-              if (
-                global.windowPixel &&
-                global.windowPixel.w > 500 &&
-                global.windowPixel.h > 500
-              ) {
-                i = j = 1000000000
-                fun(global.windowPixel)
-                return
-              }
+              // if (
+              //   global.windowPixel &&
+              //   global.windowPixel.w > 500 &&
+              //   global.windowPixel.h > 500
+              // ) {
+              //   i = j = 1000000000
+              //   fun(global.windowPixel)
+              //   return
+              // }
               for (var h = 0; h < 10000; h++) {
                 let hColor =
                   pixels.get(j, i + h, 0) +
@@ -145,7 +156,7 @@ const datas = (func = {
     })
   },
   //获取指定元素位置
-  getPx: (icons, fun, funArr) => {
+  getPx: (icons, fun, send = {}) => {
     if (icons.color) {
       icons = [icons]
     }
@@ -156,23 +167,23 @@ const datas = (func = {
       h: robot.getScreenSize().height
     }
     datas.getScreen(() => {
-      getPixels(global.imgPath, function(err, pixels) {
+      getPixels(global.imgPath, function (err, pixels) {
         if (err) return
         // global.icons[icons] = { pixels: pixels.shape, color: [] }
         var findIs = false,
           pxArr = [],
           iconLength = [],
-          jsons = {}
-        for (
-          let i = global.windowPixel.y;
-          i < global.windowPixel.y + global.windowPixel.h;
-          i++
-        ) {
-          for (
-            let j = global.windowPixel.x;
-            j < global.windowPixel.x + global.windowPixel.w;
-            j++
-          ) {
+          jsons = {},
+          list = []
+        let pxsho = {
+          w: send.w || global.windowPixel.w,
+          h: send.h || global.windowPixel.h,
+          x: send.x || global.windowPixel.x,
+          y: send.y || global.windowPixel.y
+        }
+        console.log(pxsho)
+        for (let i = pxsho.y; i < pxsho.y + pxsho.h; i++) {
+          for (let j = pxsho.x; j < pxsho.x + pxsho.w; j++) {
             let thisColor =
               pixels.get(j, i, 0) +
               ',' +
@@ -197,9 +208,28 @@ const datas = (func = {
                   scopeIsTrue = true
                 }
               }
+              let sumNum = 0
 
-              if (item.color[0] == thisColor || scopeIsTrue) {
-                let sumNum = 0
+              if (item.colorPosition && item.colorPosition[0].color == thisColor) {
+
+                for (let cpi = 0; cpi < item.colorPosition.length; cpi++) {
+                  let mcolor =
+                    pixels.get(j + item.colorPosition[cpi].position[0], i + item.colorPosition[cpi].position[1], 0) +
+                    ',' +
+                    pixels.get(j + item.colorPosition[cpi].position[0], i + item.colorPosition[cpi].position[1], 1) +
+                    ',' +
+                    pixels.get(j + item.colorPosition[cpi].position[0], i + item.colorPosition[cpi].position[1], 2) +
+                    ',' +
+                    pixels.get(j + item.colorPosition[cpi].position[0], i + item.colorPosition[cpi].position[1], 3)
+
+                  if (mcolor == item.colorPosition[cpi].color) {
+
+                    sumNum++
+                  }
+                }
+              }
+              if (!item.colorPosition && (item.color[0] == thisColor || scopeIsTrue)) {
+
                 for (let m = 0; m < item.pixels[1]; m++) {
                   for (let s = 0; s < item.pixels[0]; s++) {
                     let mcolor =
@@ -232,32 +262,37 @@ const datas = (func = {
                   }
                 }
                 //console.log({ x: j - global.windowPixel.x, y: i - global.windowPixel.y })
-                if (sumNum / item.color.length > 0.8) {
-                  pxArr[mts] = {
-                    name: item.name,
-                    x: j,
-                    y: i
-                  }
-                  jsons[item.name] = pxArr[mts]
-                } else {
-                  jsons[item.name] = jsons[item.name] || false
-                  pxArr[mts] = pxArr[mts] || false
+
+              }
+              let clength = item.colorPosition ? item.colorPosition.length : item.color.length
+              // item.colorPosition && console.log(sumNum,clength)
+
+              if (sumNum / clength > 0.9) {
+                list.push({ name: item.name, x: j, y: i })
+                pxArr[mts] = {
+                  name: item.name,
+                  x: j,
+                  y: i
                 }
-                if (sumNum / item.color.length > 0.8) {
-                  iconLength[mts] = iconLength[mts] || []
-                  iconLength[mts].push({
-                    x: j,
-                    y: i
-                  })
-                } else {
-                  iconLength[mts] = iconLength[mts] || []
-                }
+                jsons[item.name] = pxArr[mts]
+              } else {
+                jsons[item.name] = jsons[item.name] || false
+                pxArr[mts] = pxArr[mts] || false
+              }
+              if (sumNum / clength > 0.5) {
+                iconLength[mts] = iconLength[mts] || []
+                iconLength[mts].push({
+                  x: j,
+                  y: i
+                })
+              } else {
+                iconLength[mts] = iconLength[mts] || []
               }
             }
           }
         }
 
-        fun && fun(pxArr, iconLength, jsons)
+        fun && fun(pxArr, iconLength, jsons, list)
       })
     })
   },
@@ -270,10 +305,10 @@ const datas = (func = {
     //console.log(imgData)
     client
       .generalBasic(image.toString('base64'))
-      .then(function(result) {
+      .then(function (result) {
         console.log(JSON.stringify(result))
       })
-      .catch(function(err) {
+      .catch(function (err) {
         // 如果发生网络错误
         console.log(err)
       })
@@ -282,9 +317,9 @@ const datas = (func = {
     let getPic = datas.getPic
     let nowpy = robot.getMousePos()
     let xy = [
-        obj.xy[0] + global.windowPixel.x,
-        obj.xy[1] + global.windowPixel.y
-      ],
+      obj.xy[0] + global.windowPixel.x,
+      obj.xy[1] + global.windowPixel.y
+    ],
       mouse = obj.mouseKey,
       key = obj.key,
       fun = obj.fun
@@ -336,9 +371,9 @@ const datas = (func = {
                 console.log('开始验证执行条件判断', obj.checkBefore)
                 checks[obj.checkBefore]
                   ? setTimeout(
-                      () => checks[obj.checkBefore]({ resolve, reject }),
-                      200
-                    )
+                    () => checks[obj.checkBefore]({ resolve, reject }),
+                    200
+                  )
                   : false && resolve(true)
               } else {
                 console.log('位置坐标验证通过')
@@ -393,7 +428,7 @@ const datas = (func = {
             return
           }
           if (!zz[0]) {
-            ;(x = xy[0]), (y = xy[1])
+            ; (x = xy[0]), (y = xy[1])
           }
           let nowpys = robot.getMousePos()
           var pyxcs = (nowpys.x - x) / 3,
@@ -442,7 +477,7 @@ const datas = (func = {
     nums = 0
     nowPy = []
     arrJt = []
-    getPixels(imgPath, function(err, pixels) {
+    getPixels(imgPath, function (err, pixels) {
       if (err) {
         getZZPx = (zz, imgPath)
         return

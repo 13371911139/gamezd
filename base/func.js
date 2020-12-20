@@ -58,6 +58,7 @@ let datas = {
     return new Promise((resole, reject) => {
       oldIndex.getWindow(r => {
         global.windowPixel = r
+        console.log(r, 99999)
         resole(r)
       })
     })
@@ -130,16 +131,17 @@ let datas = {
       })
     })
   },
-  getIconPx: icons => {
+  getIconPx: (icons, send) => {
     return new Promise((resole, reject) => {
       //  console.log(icons)
-      oldIndex.getPx(icons, (pxArr, iconLength, jsons) => {
+      oldIndex.getPx(icons, (pxArr, iconLength, jsons, list) => {
         resole({
           pxArr,
           iconLength,
-          jsons
+          jsons,
+          list
         })
-      })
+      }, send)
     })
   },
   getColor: (pic, x, y) => {
@@ -149,13 +151,16 @@ let datas = {
       3
     )}`
   },
+  getTextPosition: async (text) => {
+
+  },
   isStop: async () => {
-    global.oldc=global.oldc || ''
+    global.oldc = global.oldc || ''
     global.icons.isStop =
       global.icons.isStop ||
       (await func.getIcon(appDir + '/img/alltitle.png', 'isStop'))
     let stopPx = await datas.getIconPx(global.icons.isStop)
-    let pxs = stopPx.jsons.isStop||{}
+    let pxs = stopPx.jsons.isStop || {}
 
     pxs.oldc = global.oldc
     await datas.getCutImg()
@@ -171,7 +176,7 @@ let datas = {
           parseInt(datas.getColor(pixels, pxs.x + 20, pxs.y - 25))
 
         if (pxs.oldc !== newc) {
-          console.log(pxs.oldc, newc)
+          console.log(pxs.oldc, newc, 111)
           global.isStop = false
           global.oldc = pxs.oldc = newc
 
@@ -188,6 +193,115 @@ let datas = {
         }
       })
     })
+  },
+  selectMini: async () => {
+    let iconsm = await datas.getIconPx(allIcons.fcs.huoshangdlg)
+    let sp = await datas.getIconPx([
+      allIcons.fcs.psdao,
+      allIcons.fcs.psmianbu,
+      allIcons.fcs.psshanzi,
+
+      allIcons.fcs.psmianfen,
+      allIcons.fcs.psmutou,
+      allIcons.fcs.psfu,
+      allIcons.fcs.pslurong,
+
+      allIcons.fcs.psyan,
+      allIcons.fcs.psmaozi,
+      allIcons.fcs.psjiu,
+      allIcons.fcs.pslazhu,
+    ])
+    sp.list = sp.list.filter(r => {
+      return r
+    })
+    let buyItem = { se: 0 }
+    let sellItem = { se: 0 }
+    let upbuyNum = global.buyNum || 0
+    for (let i = 0; i < sp.list.length; i++) {
+      let item = sp.list[i]
+      await events.mouseMove([item.x + 10, item.y + 10])
+      await events.click()
+      await events.mouseMove([item.x + 10, item.y - 40])
+
+      let number = 0
+      //判断是买还是卖
+      if (item.x > iconsm.jsons.huoshangdlg.x + 150) {
+        number = await datas.getNum(iconsm, true)
+
+        if (global.buyNum < number || !number) {
+          await events.mouseMove([
+            iconsm.jsons.huoshangdlg.x + 225,
+            iconsm.jsons.huoshangdlg.y + 309
+          ])
+          await events.click()
+          await events.mouseMove([
+            iconsm.jsons.huoshangdlg.x + 225,
+            iconsm.jsons.huoshangdlg.y + 359
+          ])
+          await events.click()
+          await events.sleep(400)
+          await events.click()
+        }
+      } else {
+        number = await datas.getNum(iconsm)
+        let se = number - item.name
+        if (se < buyItem.se && item.x < iconsm.jsons.huoshangdlg.x + 150) {
+          //获取到价格合适的进行购买
+          buyItem.se = se
+          item.buyNum = number
+          buyItem.item = item
+
+        } else {
+          return false
+        }
+      }
+      console.log(number)
+    }
+    global.buyNum = buyItem.item.buyNum
+    await events.mouseMove([buyItem.item.x, buyItem.item.y])
+    await events.click()
+    await events.mouseMove([
+      iconsm.jsons.huoshangdlg.x - 70,
+      iconsm.jsons.huoshangdlg.y + 309
+    ])
+    await events.click()
+    await events.mouseMove([
+      iconsm.jsons.huoshangdlg.x - 70,
+      iconsm.jsons.huoshangdlg.y + 359
+    ])
+    await events.click()
+    await events.sleep(400)
+    await events.click()
+    await events.sleep(10000)
+
+    return sp
+  },
+  getNum: async (iconsm, issell) => {
+    console.log(issell, issell ? iconsm.jsons.huoshangdlg.x + 290 : iconsm.jsons.huoshangdlg.x - 10)
+    let iconsms = await datas.getIconPx(
+      [
+        allIcons.fcs.a0,
+        allIcons.fcs.a1,
+        allIcons.fcs.a2,
+        allIcons.fcs.a3,
+        allIcons.fcs.a4,
+        allIcons.fcs.a5,
+        allIcons.fcs.a6,
+        allIcons.fcs.a7,
+        allIcons.fcs.a8,
+        allIcons.fcs.a9,
+      ],
+      {
+        x: issell ? iconsm.jsons.huoshangdlg.x + 260 : iconsm.jsons.huoshangdlg.x - 10,
+        y: iconsm.jsons.huoshangdlg.y + 270,
+        w: 90,
+        h: 22
+      })
+    iconsms.list.sort((item, item1) => {
+      return item.x - item1.x
+    })
+    console.log(iconsms)
+    return iconsms.list.map(item => { return item.name }).join('')
   }
 }
 module.exports = datas

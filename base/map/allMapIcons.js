@@ -82,7 +82,69 @@ module.exports = async () => {
       closebut: await func.getIcon(
         appDir + '/img/closebut.png',
         'closebut'
-      )
+      ),
+      bangpaimenk: await func.getIcon(
+        appDir + '/img/bangpaimenk.png',
+        'bangpaimenk'
+      ),
+      bangpaizhuguan: await func.getIcon(
+        appDir + '/img/bangpaizhuguan.png',
+        'bangpaizhuguan'
+      ),
+      bangpaineishiye: await func.getIcon(
+        appDir + '/img/bangpaineishiye.png',
+        'bangpaineishiye'
+      ),
+      jinrujinku: await func.getIcon(
+        appDir + '/img/jinrujinku.png',
+        'jinrujinku'
+      ),
+      jinkuzongguan: await func.getIcon(
+        appDir + '/img/jinkuzongguan.png',
+        'jinkuzongguan'
+      ),
+      lingqurenwu: await func.getIcon(
+        appDir + '/img/lingqurenwu.png',
+        'lingqurenwu'
+      ),
+      huo: await func.getIcon(
+        appDir + '/img/huo.png',
+        'huo',
+      ),
+      huoshangdlg: await func.getIcon(
+        appDir + '/img/huoshangdlg.png',
+        'huoshangdlg'
+      ),
+      'a0': await func.getIcon(appDir + '/img/0.png', 0, '0,0,0,255'),
+      'a1': await func.getIcon(appDir + '/img/1.png', 1, '0,0,0,255'),
+      'a2': await func.getIcon(appDir + '/img/2.png', 2, '0,0,0,255'),
+      'a3': await func.getIcon(appDir + '/img/3.png', 3, '0,0,0,255'),
+      'a4': await func.getIcon(appDir + '/img/4.png', 4, '0,0,0,255'),
+      'a5': await func.getIcon(appDir + '/img/5.png', 5, '0,0,0,255'),
+      'a6': await func.getIcon(appDir + '/img/6.png', 6, '0,0,0,255'),
+      'a7': await func.getIcon(appDir + '/img/7.png', 7, '0,0,0,255'),
+      'a9': await func.getIcon(appDir + '/img/9.png', 9, '0,0,0,255'),
+      'a8': await func.getIcon(appDir + '/img/8.png', 8, '0,0,0,255'),
+      'psdao': await func.getIcon(appDir + '/img/psdao.png', 5000),//刀
+      'psmianbu': await func.getIcon(appDir + '/img/psmianbu.png', 3200),//棉布
+      'psshanzi': await func.getIcon(appDir + '/img/psshanzi.png', 4500),//扇子
+
+      'psmianfen': await func.getIcon(appDir + '/img/psmianfen.png', 2600),//面粉
+      'psmutou': await func.getIcon(appDir + '/img/psmutou.png', 4000),//木头
+      'psfu': await func.getIcon(appDir + '/img/psfu.png', 5500),//符咒
+      'pslurong': await func.getIcon(appDir + '/img/pslurong.png', 7000),//鹿茸
+
+      'psyan': await func.getIcon(appDir + '/img/psyan.png', 8000),//盐
+      'psmaozi': await func.getIcon(appDir + '/img/psmaozi.png', 3300),//帽子
+      'psjiu': await func.getIcon(appDir + '/img/psjiu.png', 4000),//酒
+      'pslazhu': await func.getIcon(appDir + '/img/pslazhu.png', 2000),//蜡烛
+
+      //  bpcf:await func.getIcon(appDir + '/img/pslazhu.png', 'che','')
+      //只是判断当前所在区域incsc
+      'cs': await func.getIcon(appDir + '/img/incsc.png', 'cs'), //在长寿
+      cashangrenpang: await func.getIcon(appDir + '/img/cashangrenpang.png', 'cashangrenpang'),
+      cashangren: await func.getIcon(appDir + '/img/cashangren.png', 'cashangren'),
+      jiaoyi: await func.getIcon(appDir + '/img/jiaoyitext.png', 'jiaoyi', '255,0,0,255'),//交易文字
     }
   }
 }

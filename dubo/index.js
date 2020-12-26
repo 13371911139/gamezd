@@ -125,7 +125,7 @@ let myfun = async function () {
 
         data.push(newData)
       }
-      if (newData.snum / 20 > 32) {
+      if (newData.snum / 20 >= 32) {
         socket.write('shuguangguang')
         return
       }
